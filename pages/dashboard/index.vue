@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-slate-50 h-screen w-screen flex flex-col py-10 px-8">
+  <div class="bg-slate-50 min-h-screen w-screen flex flex-col py-10 px-8">
     <h1 class='text-5xl mb-3 font-bold text-slate-700'>Admin Dashboard</h1>
     <h3 class='text-lg font-medium text-slate-500'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
       praesentium!</h3>

@@ -107,7 +107,7 @@ const rules = {
   subnet: {
     name: {
       required: true,
-      message: 'Please input your name',
+      message: 'Please input your subnet name',
       trigger: 'blur'
     },
     subnetIp: {

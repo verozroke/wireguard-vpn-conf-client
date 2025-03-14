@@ -15,5 +15,5 @@ export type Client = {
   privateKeyRef: string
   isEnabled: boolean
   subnetId: number
-  subnet: Subnet
+  subnet?: Subnet
 }

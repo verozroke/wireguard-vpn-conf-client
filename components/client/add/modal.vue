@@ -3,7 +3,7 @@
     v-model:show="model"
     preset="card"
     class='w-[600px]'
-    :title="`Create New Subnet`"
+    :title="`Create New Client`"
     :bordered="false"
     size="huge"
   >
@@ -16,41 +16,25 @@
       :size="size"
     >
       <NFormItem
-        label="Subnet Name"
-        path="subnet.name"
+        label="Client Name"
+        path="client.name"
       >
         <NInput
-          v-model:value="formValue.subnet.name"
+          v-model:value="formValue.client.name"
           clearable
-          placeholder="Input your subnet name"
+          placeholder="Input your client name"
         />
       </NFormItem>
       <NFormItem
-        label="Subnet IP Address"
-        path="subnet.subnetIp"
+        label="Client IP Address"
+        path="client.clientIp"
       >
         <NInput
-          v-model:value="formValue.subnet.subnetIp"
+          v-model:value="formValue.client.clientIp"
           maxlength="15"
           clearable
-          placeholder="Input your subnet IP address"
+          placeholder="Input your client IP address"
         />
-      </NFormItem>
-      <NFormItem
-        label="Subnet Mask (0-32)"
-        path="subnet.subnetMask"
-      >
-        <NInput
-          v-model:value="formValue.subnet.subnetMask"
-          :allow-input="onlyAllowNumber"
-          maxlength="2"
-          clearable
-          placeholder="Input your subnet mask"
-        >
-          <template #prefix>
-            /
-          </template>
-        </NInput>
       </NFormItem>
     </NForm>
     <template #footer>
@@ -67,7 +51,7 @@
           Cancel
         </NButton>
         <NButton
-          @click="emit('add', formValue.subnet)"
+          @click="emit('add')"
           secondary
           strong
           type="primary"
@@ -75,7 +59,7 @@
           <template #icon>
             <Icon name="mdi:plus" />
           </template>
-          Create Subnet
+          Create Client
         </NButton>
       </div>
     </template>
@@ -84,6 +68,7 @@
 
 <script setup lang="ts">
 import { NModal, NButton, type FormInst, NForm, NFormItem, NInput } from 'naive-ui';
+import type { Client } from '~/core/types/subnet';
 
 
 const model = defineModel<boolean>()
@@ -92,29 +77,22 @@ const emit = defineEmits(['add'])
 const formRef = ref<FormInst | null>(null)
 const size = ref<'small' | 'medium' | 'large'>('medium')
 const formValue = ref({
-  subnet: {
+  client: {
     name: '',
-    subnetIp: '',
-    subnetMask: '', // (0-32)
+    clientIp: '',
   }
 })
 
-const onlyAllowNumber = (value: string) => !value || /^\d+$/.test(value)
 const rules = {
   subnet: {
     name: {
       required: true,
-      message: 'Please input your subnet name',
+      message: 'Please input your client name',
       trigger: 'blur'
     },
-    subnetIp: {
+    clientIp: {
       required: true,
-      message: 'Please input your subnet IP address',
-      trigger: 'blur'
-    },
-    subnetMask: {
-      required: true,
-      message: 'Please input your subnet mask',
+      message: 'Please input your client IP address',
       trigger: 'blur'
     },
   },

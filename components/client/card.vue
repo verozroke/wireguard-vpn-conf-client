@@ -14,7 +14,6 @@
       <div class="flex items-center gap-2">
         <ClientEnableToggler v-model='client.isEnabled' />
         <ClientEditButton @click="showModal = true" />
-
         <ClientDeleteButton @click="deleteClient" />
       </div>
     </template>
@@ -39,15 +38,37 @@
 
     <br>
     <span class="font-medium text-slate-700">Manage this client account in the current subnet as may you want.</span>
-
+    <template #footer>
+      <div class="flex w-full gap-2 justify-end">
+        <NButton
+          class="w-fit my-4"
+          type="primary"
+        >
+          Download Configurations
+          <template #icon>
+            <Icon name="mdi:download" />
+          </template>
+        </NButton>
+        <NButton
+          class="w-fit my-4"
+          type="primary"
+        >
+          Generate QR Code
+          <template #icon>
+            <Icon name="mdi:qrcode" />
+          </template>
+        </NButton>
+      </div>
+    </template>
   </n-card>
 </template>
 
 <script setup lang="ts">
 import type { Client } from '~/core/types/subnet';
-import { NCard, NTag, useDialog } from 'naive-ui';
+import { NCard, NButton, NTag, useDialog } from 'naive-ui';
 const dialog = useDialog()
 const showModal = ref(false)
+
 
 const props = defineProps<{
   client: Client

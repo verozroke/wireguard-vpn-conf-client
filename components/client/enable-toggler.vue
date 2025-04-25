@@ -1,7 +1,7 @@
 <template>
   <n-switch
-    size="small"
     v-model:value="model"
+    size="small"
   >
     <template #checked>
       enabled

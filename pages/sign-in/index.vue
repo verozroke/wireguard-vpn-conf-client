@@ -26,8 +26,8 @@
           path="login"
         >
           <NInput
-            clearable
             v-model:value="formValue.login"
+            clearable
             placeholder="Input your login"
           />
         </NFormItem>
@@ -47,8 +47,8 @@
         <NFormItem>
           <NButton
             type="primary"
-            @click="signIn"
             icon-placement="right"
+            @click="signIn"
           >
             Sign In
             <template #icon>
@@ -67,8 +67,8 @@
 <script setup lang="ts">
 import type { FormInst } from 'naive-ui'
 import { NButton, NForm, NFormItem, NInput, useMessage } from 'naive-ui'
-import { toDisplayString } from 'vue'
-import { ref } from 'vue'
+import { toDisplayString, ref  } from 'vue'
+
 import { authService, type LoginBody } from '~/core/services/auth.service'
 import { useUserStore } from '~/core/stores/UserStore'
 const toast = useMessage()

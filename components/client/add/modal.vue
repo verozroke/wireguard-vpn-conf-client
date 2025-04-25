@@ -40,10 +40,10 @@
     <template #footer>
       <div class="flex w-full justify-end gap-2">
         <NButton
-          @click='model = false'
           secondary
           strong
           type="error"
+          @click='model = false'
         >
           <template #icon>
             <Icon name="mdi:close" />
@@ -51,10 +51,10 @@
           Cancel
         </NButton>
         <NButton
-          @click="emit('add')"
           secondary
           strong
           type="primary"
+          @click="emit('add')"
         >
           <template #icon>
             <Icon name="mdi:plus" />

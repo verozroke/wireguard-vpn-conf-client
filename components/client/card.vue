@@ -7,9 +7,9 @@
 
     <template #header-extra>
       <ClientEditModal
+        v-model="showModal"
         :client="client"
         @edit="editClient"
-        v-model="showModal"
       />
       <div class="flex items-center gap-2">
         <ClientEnableToggler v-model='client.isEnabled' />

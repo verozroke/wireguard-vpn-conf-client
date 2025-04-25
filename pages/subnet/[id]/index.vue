@@ -21,8 +21,8 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute()
 import type { Client } from '~/core/types/subnet';
+const route = useRoute()
 
 const showCreateModal = ref(false)
 

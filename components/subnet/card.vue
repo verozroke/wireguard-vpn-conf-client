@@ -7,9 +7,9 @@
 
     <template #header-extra>
       <SubnetEditModal
+        v-model="showModal"
         :subnet="subnet"
         @edit="editSubnet"
-        v-model="showModal"
       />
       <div class="flex gap-2">
         <SubnetEditButton @click="showModal = true" />

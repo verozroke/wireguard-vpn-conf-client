@@ -23,20 +23,22 @@
       >
         <NFormItem
           label="Login"
-          path="user.login"
+          path="login"
         >
           <NInput
             clearable
+            v-model:value="formValue.login"
             placeholder="Input your login"
           />
         </NFormItem>
         <NFormItem
           label="Password"
-          path="user.password"
+          path="password"
         >
           <NInput
+            v-model:value="formValue.password"
             type='password'
-            maxlength="24"
+            maxlength="32"
             show-count
             clearable
             placeholder="Input your password"
@@ -64,19 +66,22 @@
 
 <script setup lang="ts">
 import type { FormInst } from 'naive-ui'
-import { NButton, NForm, NFormItem, NInput } from 'naive-ui'
+import { NButton, NForm, NFormItem, NInput, useMessage } from 'naive-ui'
+import { toDisplayString } from 'vue'
 import { ref } from 'vue'
-
+import { authService, type LoginBody } from '~/core/services/auth.service'
+import { useUserStore } from '~/core/stores/UserStore'
+const toast = useMessage()
 const router = useRouter()
 const formRef = ref<FormInst | null>(null)
 const size = ref<'small' | 'medium' | 'large'>('medium')
 const formValue = ref({
-  user: {
-    name: '',
-    age: ''
-  },
-  phone: ''
+  login: '',
+  password: ''
 })
+
+const userStore = useUserStore()
+
 const rules = {
   user: {
     login: {
@@ -93,16 +98,52 @@ const rules = {
 }
 const signIn = (e: MouseEvent) => {
   e.preventDefault()
-  router.push('/dashboard')
 
-  formRef.value?.validate((errors) => {
-    if (!errors) {
+  formRef.value?.validate(async (err) => {
+    if (!err) {
+      await SigInRequest()
+      return
     }
-    else {
-      console.log(errors)
-    }
+    toast.error(err.toString())
   })
 }
+
+
+const SigInRequest = async () => {
+  try {
+
+    const body: LoginBody = {
+      login: formValue.value.login,
+      password: formValue.value.password,
+    }
+
+    console.log(body)
+
+    const message = await authService.login(body)
+    userStore.isAuthenticated = true
+    // route push
+    formValue.value.login = ''
+    formValue.value.password = ''
+    router.push('/dashboard')
+    toast.success(message)
+
+  } catch (err) {
+    // console.error(err)
+    toast.error('Login was unsuccessfull')
+  }
+}
+
+onMounted(async () => {
+  if (userStore.isAuthenticated || localStorage.getItem('token')) {
+    try {
+      await userStore.getUser()
+      router.push('/dashboard')
+      return
+    } catch (error) {
+      return
+    }
+  }
+})
 </script>
 
 <style scoped></style>

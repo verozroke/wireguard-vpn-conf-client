@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev ",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -16,6 +16,7 @@
     "@nuxtjs/tailwindcss": "^6.13.2",
     "@pinia/nuxt": "^0.10.1",
     "@tailwindcss/vite": "^4.0.14",
+    "axios": "^1.9.0",
     "naive-ui": "^2.41.0",
     "nuxt": "^3.16.0",
     "nuxtjs-naive-ui": "^1.0.2",

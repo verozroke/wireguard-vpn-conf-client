@@ -12,4 +12,12 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
   ],
   css: ['~/assets/css/main.css'],
+  runtimeConfig: {
+    public: {
+      API_URL: process.env.API_URL,
+    }
+  },
+  devServer: {
+    host: '127.0.0.1'
+  }
 })

@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { NDialogProvider, NModalProvider, NMessageProvider, NConfigProvider } from 'naive-ui';
-
-
-
+import {
+  NDialogProvider,
+  NModalProvider,
+  NMessageProvider,
+  NConfigProvider,
+} from 'naive-ui'
 </script>
 
 <template>
@@ -15,5 +17,4 @@ import { NDialogProvider, NModalProvider, NMessageProvider, NConfigProvider } fr
       </n-modal-provider>
     </n-message-provider>
   </n-config-provider>
-
 </template>

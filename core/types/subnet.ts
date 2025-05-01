@@ -1,7 +1,5 @@
-import type { Client } from "./client"
-import type { User } from "./user"
-
-
+import type { Client } from './client'
+import type { User } from './user'
 
 export type Subnet = {
   id: string
@@ -12,5 +10,3 @@ export type Subnet = {
   userId: string
   user?: User
 }
-
-

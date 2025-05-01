@@ -2,12 +2,11 @@
   <n-modal
     v-model:show="model"
     preset="card"
-    class='w-[600px]'
+    class="w-[600px]"
     :title="`Create New Client`"
     :bordered="false"
     size="huge"
   >
-
     <NForm
       ref="formRef"
       :label-width="80"
@@ -15,20 +14,14 @@
       :rules="rules"
       :size="size"
     >
-      <NFormItem
-        label="Client Name"
-        path="client.name"
-      >
+      <NFormItem label="Client Name" path="client.name">
         <NInput
           v-model:value="formValue.client.name"
           clearable
           placeholder="Input your client name"
         />
       </NFormItem>
-      <NFormItem
-        label="Client IP Address"
-        path="client.clientIp"
-      >
+      <NFormItem label="Client IP Address" path="client.clientIp">
         <NInput
           v-model:value="formValue.client.clientIp"
           maxlength="15"
@@ -39,23 +32,13 @@
     </NForm>
     <template #footer>
       <div class="flex w-full justify-end gap-2">
-        <NButton
-          secondary
-          strong
-          type="error"
-          @click='model = false'
-        >
+        <NButton secondary strong type="error" @click="model = false">
           <template #icon>
             <Icon name="mdi:close" />
           </template>
           Cancel
         </NButton>
-        <NButton
-          secondary
-          strong
-          type="primary"
-          @click="emit('add')"
-        >
+        <NButton secondary strong type="primary" @click="emit('add')">
           <template #icon>
             <Icon name="mdi:plus" />
           </template>
@@ -67,9 +50,15 @@
 </template>
 
 <script setup lang="ts">
-import { NModal, NButton, type FormInst, NForm, NFormItem, NInput } from 'naive-ui';
-import type { Client } from '~/core/types/subnet';
-
+import {
+  NModal,
+  NButton,
+  type FormInst,
+  NForm,
+  NFormItem,
+  NInput,
+} from 'naive-ui'
+import type { Client } from '~/core/types/subnet'
 
 const model = defineModel<boolean>()
 const emit = defineEmits(['add'])
@@ -80,7 +69,7 @@ const formValue = ref({
   client: {
     name: '',
     clientIp: '',
-  }
+  },
 })
 
 const rules = {
@@ -88,16 +77,15 @@ const rules = {
     name: {
       required: true,
       message: 'Please input your client name',
-      trigger: 'blur'
+      trigger: 'blur',
     },
     clientIp: {
       required: true,
       message: 'Please input your client IP address',
-      trigger: 'blur'
+      trigger: 'blur',
     },
   },
 }
-
 </script>
 
 <style scoped></style>

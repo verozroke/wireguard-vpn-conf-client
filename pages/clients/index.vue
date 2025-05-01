@@ -1,16 +1,13 @@
 <template>
-
   <dashboard-panel>
     <div class="bg-slate-50 min-h-screen flex flex-col py-10 px-8">
-      <h1 class='text-5xl mb-3 font-bold text-slate-700'>Clients</h1>
-      <h3 class='text-lg  mb-5 font-medium text-slate-500'>Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        Quisquam,
-        praesentium!</h3>
+      <h1 class="text-5xl mb-3 font-bold text-slate-700">Clients</h1>
+      <h3 class="text-lg mb-5 font-medium text-slate-500">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
+        praesentium!
+      </h3>
       <client-add-button @click="showCreateModal = true" />
-      <ClientAddModal
-        v-model="showCreateModal"
-        @add="createClient"
-      />
+      <ClientAddModal v-model="showCreateModal" @add="createClient" />
       <ClientEditModal
         v-model="showEditModal"
         :client="currentEditClient"
@@ -32,16 +29,24 @@
       </div>
     </div>
   </dashboard-panel>
-
 </template>
 
 <script setup lang="ts">
-import { NButton, type DataTableColumns, NDataTable, useMessage } from 'naive-ui';
-import type { RowData } from 'naive-ui/es/data-table/src/interface';
-import { Fragment } from 'vue/jsx-runtime';
-import { clientService, type ClientCreateBody, type ClientEditBody } from '~/core/services/client.service';
-import { useUserStore } from '~/core/stores/UserStore';
-import type { Client } from '~/core/types/client';
+import {
+  NButton,
+  type DataTableColumns,
+  NDataTable,
+  useMessage,
+} from 'naive-ui'
+import type { RowData } from 'naive-ui/es/data-table/src/interface'
+import { Fragment } from 'vue/jsx-runtime'
+import {
+  clientService,
+  type ClientCreateBody,
+  type ClientEditBody,
+} from '~/core/services/client.service'
+import { useUserStore } from '~/core/stores/UserStore'
+import type { Client } from '~/core/types/client'
 
 const showCreateModal = ref(false)
 const showEditModal = ref(false)
@@ -49,7 +54,6 @@ const userStore = useUserStore()
 const router = useRouter()
 const toast = useMessage()
 const rowKey = (row: RowData) => row.id
-
 
 const clients = ref<Client[]>([])
 
@@ -66,7 +70,7 @@ const paginationReactive = reactive({
   onUpdatePageSize: (pageSize: number) => {
     paginationReactive.pageSize = pageSize
     paginationReactive.page = 1
-  }
+  },
 })
 
 type DataTableColumnMethods = {
@@ -75,27 +79,37 @@ type DataTableColumnMethods = {
   editModalHandler: (row: Client) => void
 }
 
-const clientNameFilterOptions = computed(() => clients.value.map(client => ({
-  label: client.name,
-  value: client.name
-})))
+const clientNameFilterOptions = computed(() =>
+  clients.value.map((client) => ({
+    label: client.name,
+    value: client.name,
+  }))
+)
 
-const clientIpFilterOptions = computed(() => clients.value.map(client => ({
-  label: client.clientIp,
-  value: client.clientIp
-})))
+const clientIpFilterOptions = computed(() =>
+  clients.value.map((client) => ({
+    label: client.clientIp,
+    value: client.clientIp,
+  }))
+)
 
-const clientMaskFilterOptions = computed(() => clients.value.map(client => ({
-  label: client.clientMask.toString(),
-  value: client.clientMask.toString()
-})))
+const clientMaskFilterOptions = computed(() =>
+  clients.value.map((client) => ({
+    label: client.clientMask.toString(),
+    value: client.clientMask.toString(),
+  }))
+)
 
-function createColumns({ deleteClient, goTo, editModalHandler }: DataTableColumnMethods): DataTableColumns<Client> {
+function createColumns({
+  deleteClient,
+  goTo,
+  editModalHandler,
+}: DataTableColumnMethods): DataTableColumns<Client> {
   return [
     {
       title: 'ID',
       key: 'id',
-      resizable: true
+      resizable: true,
     },
     {
       title: 'Name',
@@ -107,7 +121,7 @@ function createColumns({ deleteClient, goTo, editModalHandler }: DataTableColumn
       filter(value, row) {
         return !!~row.name.indexOf(String(value))
       },
-      resizable: true
+      resizable: true,
     },
     {
       title: 'Client IP',
@@ -117,7 +131,7 @@ function createColumns({ deleteClient, goTo, editModalHandler }: DataTableColumn
       filter(value, row) {
         return !!~row.clientIp.indexOf(String(value))
       },
-      resizable: true
+      resizable: true,
     },
     {
       title: 'Client Mask',
@@ -127,7 +141,7 @@ function createColumns({ deleteClient, goTo, editModalHandler }: DataTableColumn
       filter(value, row) {
         return !!~row.clientMask.toString().indexOf(String(value))
       },
-      resizable: true
+      resizable: true,
     },
     {
       title: 'Action',
@@ -141,7 +155,7 @@ function createColumns({ deleteClient, goTo, editModalHandler }: DataTableColumn
               tertiary: true,
               size: 'small',
               color: '#18a058',
-              onClick: () => goTo(row)
+              onClick: () => goTo(row),
             },
             { default: () => 'Go To' }
           ),
@@ -153,7 +167,7 @@ function createColumns({ deleteClient, goTo, editModalHandler }: DataTableColumn
               size: 'small',
               color: '#f0a020',
               style: { marginLeft: '8px' }, // чтобы кнопки не слипались
-              onClick: () => editModalHandler(row)
+              onClick: () => editModalHandler(row),
             },
             { default: () => 'Edit' }
           ),
@@ -165,14 +179,14 @@ function createColumns({ deleteClient, goTo, editModalHandler }: DataTableColumn
               size: 'small',
               color: '#d03050',
               style: { marginLeft: '8px' },
-              onClick: () => deleteClient(row)
+              onClick: () => deleteClient(row),
             },
             { default: () => 'Delete' }
-          )
+          ),
         ])
       },
-      resizable: true
-    }
+      resizable: true,
+    },
   ]
 }
 
@@ -184,12 +198,11 @@ const columns = createColumns({
   editModalHandler,
 })
 
-
 async function deleteClient(client: Client) {
   try {
     const message = await clientService.delete(client.id)
     toast.success(message)
-    clients.value = clients.value.filter(item => item.id !== client.id)
+    clients.value = clients.value.filter((item) => item.id !== client.id)
   } catch {
     toast.error('Could not delete the client.')
   }
@@ -199,7 +212,7 @@ async function editClient(client: Client) {
   try {
     const body: ClientEditBody = { ...client }
     const data = await clientService.edit(client.id, body)
-    const clientIdx = clients.value.findIndex(client => client.id === data.id)
+    const clientIdx = clients.value.findIndex((client) => client.id === data.id)
     if (clientIdx === -1) return
     clients.value[clientIdx] = data
     toast.success('Client edited successfully.')
@@ -224,7 +237,7 @@ const createClient = async (client: Omit<Client, 'id'>) => {
       name: client.name,
       clientIp: client.clientIp,
       clientMask: client.clientMask,
-      userId: userStore.user.id
+      userId: userStore.user.id,
     }
 
     const data = await clientService.create(body)
@@ -235,25 +248,21 @@ const createClient = async (client: Omit<Client, 'id'>) => {
     showCreateModal.value = false
     toast.error('Could not create the client.')
   }
-
 }
 
 const getClients = async () => {
   try {
     const data = await clientService.clients()
     clients.value = data
-
   } catch {
     toast.error('Could not fetch clients')
   }
 }
 
-
 onMounted(async () => {
   await userStore.getUser()
   await getClients()
 })
-
 </script>
 
 <style scoped></style>

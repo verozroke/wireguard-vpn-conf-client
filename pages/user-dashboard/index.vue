@@ -1,12 +1,9 @@
 <template>
-  <div>
-    User Dashboard
-  </div>
+  <div>User Dashboard</div>
 </template>
 
 <script setup>
-
-import { useUserStore } from '~/core/stores/UserStore';
+import { useUserStore } from '~/core/stores/UserStore'
 const userStore = useUserStore()
 
 onMounted(async () => {

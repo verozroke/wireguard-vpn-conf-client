@@ -1,6 +1,6 @@
-import type { Role } from "../enums/Role"
-import type { Subnet } from "./subnet"
-import type { Client } from "./client"
+import type { Role } from '../enums/Role'
+import type { Subnet } from './subnet'
+import type { Client } from './client'
 
 export type User = {
   id: string
@@ -9,4 +9,3 @@ export type User = {
   subnets?: Subnet[]
   clients?: Client[]
 }
-

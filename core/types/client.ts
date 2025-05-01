@@ -1,5 +1,5 @@
-import type { Subnet } from "./subnet"
-import type { User } from "./user"
+import type { Subnet } from './subnet'
+import type { User } from './user'
 
 export type Client = {
   id: string

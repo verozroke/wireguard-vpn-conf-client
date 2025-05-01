@@ -12,7 +12,6 @@ export const useUserStore = defineStore('userStore', () => {
   const router = useRouter()
   const isAuthenticated = ref(false)
 
-
   const getUser = async () => {
     if (!localStorage.getItem('token')) {
       router.push('/sign-in')
@@ -23,7 +22,6 @@ export const useUserStore = defineStore('userStore', () => {
       user!.value = tokenUser
       isAuthenticated.value = true
       checkAccessRedirect()
-
     } catch (error) {
       router.push('/sign-in')
       localStorage.removeItem('token')
@@ -44,22 +42,21 @@ export const useUserStore = defineStore('userStore', () => {
 
   const isAdmin = (): boolean => user.value?.role === 'Admin'
 
-
   const checkAccessRedirect = () => {
-    const currentPath = window.location.pathname;
+    const currentPath = window.location.pathname
 
     if (isAdmin() && currentPath === '/user-dashboard') {
-      router.push('/subnets');
+      router.push('/subnets')
     } else if (!isAdmin() && currentPath !== '/user-dashboard') {
-      router.push('/user-dashboard');
+      router.push('/user-dashboard')
     }
-  };
+  }
 
   return {
     isAuthenticated,
     user,
     getUser,
     logout,
-    isAdmin
+    isAdmin,
   }
 })

@@ -1,8 +1,5 @@
 <template>
-  <NButton
-    class="w-fit my-4"
-    type="primary"
-  >
+  <NButton class="w-fit my-4" type="primary">
     Create Client
     <template #icon>
       <Icon name="mdi:plus" />
@@ -12,7 +9,6 @@
 
 <script setup lang="ts">
 import { NButton } from 'naive-ui'
-
 </script>
 
 <style scoped></style>

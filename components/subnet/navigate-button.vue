@@ -1,11 +1,6 @@
 <template>
-  <NuxtLink :href='`/subnets/${subnetId}`'>
-    <NButton
-      icon-placement="right"
-      secondary
-      strong
-      type="primary"
-    >
+  <NuxtLink :href="`/subnets/${subnetId}`">
+    <NButton icon-placement="right" secondary strong type="primary">
       <template #icon>
         <Icon name="mdi:arrow-right" />
       </template>
@@ -15,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { NButton } from 'naive-ui';
+import { NButton } from 'naive-ui'
 
 defineProps<{
   subnetId: string

@@ -1,5 +1,7 @@
 <template>
-  <div class="bg-slate-50 h-screen w-screen flex flex-col items-center justify-center">
+  <div
+    class="bg-slate-50 h-screen w-screen flex flex-col items-center justify-center"
+  >
     <div class="flex w-96 pb-5">
       <NuxtLink href="/">
         <NButton quaternary>
@@ -11,8 +13,9 @@
       </NuxtLink>
     </div>
     <div class="flex flex-col w-96 gap-5">
-      <h1 class='text-3xl font-bold text-slate-700'>Sign In</h1>
-      <h3 class='text-base font-medium text-slate-500'>Lorem ipsum dolor, sit amet consectetur adipisicing.
+      <h1 class="text-3xl font-bold text-slate-700">Sign In</h1>
+      <h3 class="text-base font-medium text-slate-500">
+        Lorem ipsum dolor, sit amet consectetur adipisicing.
       </h3>
       <NForm
         ref="formRef"
@@ -21,23 +24,17 @@
         :rules="rules"
         :size="size"
       >
-        <NFormItem
-          label="Login"
-          path="login"
-        >
+        <NFormItem label="Login" path="login">
           <NInput
             v-model:value="formValue.login"
             clearable
             placeholder="Input your login"
           />
         </NFormItem>
-        <NFormItem
-          label="Password"
-          path="password"
-        >
+        <NFormItem label="Password" path="password">
           <NInput
             v-model:value="formValue.password"
-            type='password'
+            type="password"
             maxlength="32"
             show-count
             clearable
@@ -45,11 +42,7 @@
           />
         </NFormItem>
         <NFormItem>
-          <NButton
-            type="primary"
-            icon-placement="right"
-            @click="signIn"
-          >
+          <NButton type="primary" icon-placement="right" @click="signIn">
             Sign In
             <template #icon>
               <Icon name="mdi:login" />
@@ -58,11 +51,8 @@
         </NFormItem>
       </NForm>
     </div>
-
   </div>
-
 </template>
-
 
 <script setup lang="ts">
 import type { FormInst } from 'naive-ui'
@@ -77,7 +67,7 @@ const formRef = ref<FormInst | null>(null)
 const size = ref<'small' | 'medium' | 'large'>('medium')
 const formValue = ref({
   login: '',
-  password: ''
+  password: '',
 })
 
 const userStore = useUserStore()
@@ -87,13 +77,13 @@ const rules = {
     login: {
       required: true,
       message: 'Please input your password',
-      trigger: 'blur'
+      trigger: 'blur',
     },
     password: {
       required: true,
       message: 'Please input your password',
-      trigger: ['input', 'blur']
-    }
+      trigger: ['input', 'blur'],
+    },
   },
 }
 const signIn = (e: MouseEvent) => {
@@ -108,10 +98,8 @@ const signIn = (e: MouseEvent) => {
   })
 }
 
-
 const SigInRequest = async () => {
   try {
-
     const body: LoginBody = {
       login: formValue.value.login,
       password: formValue.value.password,
@@ -126,7 +114,6 @@ const SigInRequest = async () => {
     formValue.value.password = ''
     router.push('/subnets')
     toast.success(message)
-
   } catch {
     // console.error(err)
     toast.error('Login was unsuccessfull')

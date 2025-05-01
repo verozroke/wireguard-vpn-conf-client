@@ -1,4 +1,5 @@
 import type { Client } from "./client"
+import type { User } from "./user"
 
 
 
@@ -8,6 +9,8 @@ export type Subnet = {
   subnetIp: string
   subnetMask: number // (0-32)
   clients?: Client[]
+  userId: string
+  user?: User
 }
 
 

@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import type { Subnet } from '~/core/types/subnet';
-import { NCard, NButton, useDialog } from 'naive-ui';
+import { NCard, useDialog } from 'naive-ui';
 
 
 const props = defineProps<{

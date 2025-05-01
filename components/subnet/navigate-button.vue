@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink :href='`/subnet/${subnetId}`'>
+  <NuxtLink :href='`/subnets/${subnetId}`'>
     <NButton
       icon-placement="right"
       secondary

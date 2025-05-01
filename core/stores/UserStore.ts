@@ -1,9 +1,9 @@
-import { useMessage } from 'naive-ui'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { authService } from '~/core/services/auth.service'
 import type { User } from '../types/user'
+import { Role } from '../enums/Role'
 
 export const useUserStore = defineStore('userStore', () => {
   const user = ref<User | null>(null)
@@ -22,6 +22,7 @@ export const useUserStore = defineStore('userStore', () => {
       const tokenUser = await authService.me()
       user!.value = tokenUser
       isAuthenticated.value = true
+      checkAccessRedirect()
 
     } catch (error) {
       router.push('/sign-in')
@@ -41,10 +42,24 @@ export const useUserStore = defineStore('userStore', () => {
     }
   }
 
+  const isAdmin = (): boolean => user.value?.role === 'Admin'
+
+
+  const checkAccessRedirect = () => {
+    const currentPath = window.location.pathname;
+
+    if (isAdmin() && currentPath === '/user-dashboard') {
+      router.push('/subnets');
+    } else if (!isAdmin() && currentPath !== '/user-dashboard') {
+      router.push('/user-dashboard');
+    }
+  };
+
   return {
     isAuthenticated,
     user,
     getUser,
     logout,
+    isAdmin
   }
 })

@@ -3,7 +3,7 @@
     v-model:show="model"
     preset="card"
     class='w-[600px]'
-    :title="`Edit Subnet (${subnet.name})`"
+    :title="`Edit Subnet (${subnet?.name})`"
     :bordered="false"
     size="huge"
   >
@@ -70,7 +70,7 @@
           secondary
           strong
           type="primary"
-          @click="emit('edit')"
+          @click="emit('edit', { id: subnet!.id, ...formValue.subnet })"
         >
           <template #icon>
             <Icon name="mdi:pencil" />
@@ -87,8 +87,9 @@ import { NModal, NButton, type FormInst, NForm, NFormItem, NInput } from 'naive-
 import type { Subnet } from '~/core/types/subnet';
 
 const props = defineProps<{
-  subnet: Subnet
+  subnet: Subnet | null
 }>()
+
 const model = defineModel<boolean>()
 const emit = defineEmits(['edit'])
 
@@ -96,9 +97,9 @@ const formRef = ref<FormInst | null>(null)
 const size = ref<'small' | 'medium' | 'large'>('medium')
 const formValue = ref({
   subnet: {
-    name: props.subnet.name,
-    subnetIp: props.subnet.subnetIp,
-    subnetMask: props.subnet.subnetMask.toString(), // (0-32)
+    name: props.subnet?.name,
+    subnetIp: props.subnet?.subnetIp,
+    subnetMask: props.subnet?.subnetMask.toString(), // (0-32)
   }
 })
 
@@ -122,6 +123,14 @@ const rules = {
     },
   },
 }
+
+watch(() => props.subnet, (newSubnet) => {
+  formValue.value.subnet = {
+    name: newSubnet?.name,
+    subnetIp: newSubnet?.subnetIp,
+    subnetMask: newSubnet?.subnetMask.toString(),
+  };
+}, { immediate: true });
 
 </script>
 

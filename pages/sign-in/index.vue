@@ -67,7 +67,7 @@
 <script setup lang="ts">
 import type { FormInst } from 'naive-ui'
 import { NButton, NForm, NFormItem, NInput, useMessage } from 'naive-ui'
-import { toDisplayString, ref  } from 'vue'
+import { ref } from 'vue'
 
 import { authService, type LoginBody } from '~/core/services/auth.service'
 import { useUserStore } from '~/core/stores/UserStore'
@@ -124,10 +124,10 @@ const SigInRequest = async () => {
     // route push
     formValue.value.login = ''
     formValue.value.password = ''
-    router.push('/dashboard')
+    router.push('/subnets')
     toast.success(message)
 
-  } catch (err) {
+  } catch {
     // console.error(err)
     toast.error('Login was unsuccessfull')
   }
@@ -137,9 +137,9 @@ onMounted(async () => {
   if (userStore.isAuthenticated || localStorage.getItem('token')) {
     try {
       await userStore.getUser()
-      router.push('/dashboard')
+      router.push('/subnets')
       return
-    } catch (error) {
+    } catch {
       return
     }
   }

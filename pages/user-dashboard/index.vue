@@ -6,8 +6,8 @@
 
 <script setup>
 
-const userStore = useUserStore()
 import { useUserStore } from '~/core/stores/UserStore';
+const userStore = useUserStore()
 
 onMounted(async () => {
   await userStore.getUser()

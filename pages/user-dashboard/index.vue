@@ -5,13 +5,11 @@
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
       praesentium!
     </h3>
-    <div class="py-5 px-2 gap-5 flex items-center mx-auto flex-col w-full min-w-[512px] max-w-[768px]">
+    <div
+      class="py-5 px-2 gap-5 flex items-center mx-auto flex-col w-full min-w-[512px] max-w-[768px]"
+    >
       <template v-if="clients.length > 0">
-        <ClientCard
-          v-for="client in clients"
-          :key="client.id"
-          :client
-        />
+        <ClientCard v-for="client in clients" :key="client.id" :client />
       </template>
       <template v-else>
         <Icon

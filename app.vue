@@ -19,5 +19,4 @@ import {
       </n-modal-provider>
     </n-message-provider>
   </n-config-provider>
-
 </template>

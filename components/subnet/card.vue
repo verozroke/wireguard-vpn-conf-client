@@ -19,7 +19,7 @@
     <span class="font-medium text-slate-700"
       ><b>IP-address:</b> {{ subnet.subnetIp }}/{{ subnet.subnetMask }}</span
     >
-    <br />
+    <br >
     <span class="font-medium text-slate-700"
       >Navigate to subnet page to view more information about the current
       subnet.</span

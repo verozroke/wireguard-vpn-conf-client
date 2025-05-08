@@ -16,46 +16,36 @@
         <!-- <ClientDeleteButton @click="deleteClient" /> -->
       </div>
     </template>
-    <n-tag
-      class="px-4"
-      type="success"
-    >
+    <n-tag class="px-4" type="success">
       HR
       <template #icon>
         <Icon name="line-md:hash" />
       </template>
     </n-tag>
-    <br>
-    <span class="font-medium text-slate-700 leading-loose"><b>IP-address:</b> {{ client.clientIp }}/24</span>
-    <br>
+    <br >
+    <span class="font-medium text-slate-700 leading-loose"
+      ><b>IP-address:</b> {{ client.clientIp }}/24</span
+    >
+    <br >
     <!-- <span class="font-medium text-slate-700 leading-loose"><b>Public Key:</b>
       <div class="truncate w-64">{{ client.publicKey }}</div>
     </span>
     <span class="font-medium text-slate-700 leading-loose"><b>Private Key Reference:</b> {{ client.privateKeyRef
     }}</span> -->
     <!-- <br> -->
-    <span class="font-medium text-slate-700">Download configuration for this clients.</span>
+    <span class="font-medium text-slate-700"
+      >Download configuration for this clients.</span
+    >
     <template #footer>
       <div class="flex w-full gap-2 justify-end">
-        <NButton
-          class="w-fit my-4"
-          type="primary"
-          @click="downloadConfig"
-        >
+        <NButton class="w-fit my-4" type="primary" @click="downloadConfig">
           Download Configuration
           <template #icon>
             <Icon name="mdi:download" />
           </template>
         </NButton>
-        <QRCodeModal
-          v-model="qrCodeModal"
-          :qrcode="qrCodeImage"
-        />
-        <NButton
-          class="w-fit my-4"
-          type="primary"
-          @click="getQRCode"
-        >
+        <QRCodeModal v-model="qrCodeModal" :qrcode="qrCodeImage" />
+        <NButton class="w-fit my-4" type="primary" @click="getQRCode">
           Generate QR Code
           <template #icon>
             <Icon name="mdi:qrcode" />
@@ -69,7 +59,10 @@
 <script setup lang="ts">
 import type { Client } from '~/core/types/client'
 import { NCard, NButton, NTag, useMessage } from 'naive-ui'
-import { clientService, type ClientEditBody } from '~/core/services/client.service';
+import {
+  clientService,
+  type ClientEditBody,
+} from '~/core/services/client.service'
 // const dialog = useDialog()
 const showModal = ref(false)
 const qrCodeModal = ref(false)
@@ -97,7 +90,6 @@ const editClient = async (formInput: { name: string }) => {
       clientIp: props.client.clientIp,
     }
 
-
     console.log(body)
     const newClient = await clientService.edit(clientId, body, 'name')
     CardTitle = h('div', {
@@ -115,7 +107,6 @@ const editClient = async (formInput: { name: string }) => {
   }
 }
 
-
 const downloadConfig = async () => {
   try {
     const clientId = props.client.id
@@ -123,7 +114,6 @@ const downloadConfig = async () => {
     toast.success(message)
   } catch {
     toast.error('Could not download configuration.')
-
   }
 }
 
@@ -136,7 +126,6 @@ const getQRCode = async () => {
     toast.success('Scan this QR Code to get the configuration.')
   } catch {
     toast.error('Could not download configuration QR Code.')
-
   }
 }
 

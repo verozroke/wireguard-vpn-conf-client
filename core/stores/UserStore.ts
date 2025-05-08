@@ -41,7 +41,8 @@ export const useUserStore = defineStore('userStore', () => {
     }
   }
 
-  const isAdmin = (): boolean => user.value?.role === 'Admin' as unknown as Role
+  const isAdmin = (): boolean =>
+    user.value?.role === ('Admin' as unknown as Role)
 
   const checkAccessRedirect = () => {
     const currentPath = window.location.pathname

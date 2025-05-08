@@ -14,10 +14,7 @@
       :rules="rules"
       :size="size"
     >
-      <NFormItem
-        label="Client Name"
-        path="client.name"
-      >
+      <NFormItem label="Client Name" path="client.name">
         <NInput
           v-model:value="formValue.client.name"
           clearable
@@ -27,12 +24,7 @@
     </NForm>
     <template #footer>
       <div class="flex w-full justify-end gap-2">
-        <NButton
-          secondary
-          strong
-          type="error"
-          @click="model = false"
-        >
+        <NButton secondary strong type="error" @click="model = false">
           <template #icon>
             <Icon name="mdi:close" />
           </template>

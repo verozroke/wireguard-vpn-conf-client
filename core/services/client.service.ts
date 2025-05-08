@@ -53,15 +53,16 @@ class ClientService {
     return data
   }
 
-
   async myClients(userId: string): Promise<Client[]> {
-    const { data } = await axios.get<Client[]>(`${this.BASE_URL}/${userId}/my-clients`, {
-      headers: this.getAuthHeaders(),
-    })
+    const { data } = await axios.get<Client[]>(
+      `${this.BASE_URL}/${userId}/my-clients`,
+      {
+        headers: this.getAuthHeaders(),
+      }
+    )
 
     return data
   }
-
 
   async delete(clientId: string): Promise<string> {
     await axios.delete(`${this.BASE_URL}/${clientId}`, {
@@ -79,7 +80,11 @@ class ClientService {
     return data
   }
 
-  async edit(clientId: string, body: ClientEditBody, match: ClientEditMatcher = 'both'): Promise<Client> {
+  async edit(
+    clientId: string,
+    body: ClientEditBody,
+    match: ClientEditMatcher = 'both'
+  ): Promise<Client> {
     if (match == 'name') {
       const { data } = await axios.put<Client>(
         `${this.BASE_URL}/${clientId}/name`,

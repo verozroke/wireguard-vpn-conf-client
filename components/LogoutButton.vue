@@ -1,15 +1,7 @@
 <template>
-  <n-button
-    ghost
-    color="#fff"
-    icon-placement="left"
-    @click="logout"
-  >
+  <n-button ghost color="#fff" icon-placement="left" @click="logout">
     <template #icon>
-      <Icon
-        class="w-10 h-10"
-        name="mdi:logout"
-      />
+      <Icon class="w-10 h-10" name="mdi:logout" />
     </template>
     Logout
   </n-button>
@@ -17,8 +9,8 @@
 
 <script setup lang="ts">
 import { Icon } from '#components'
-import { NButton, useMessage } from 'naive-ui';
-import { useUserStore } from '~/core/stores/UserStore';
+import { NButton, useMessage } from 'naive-ui'
+import { useUserStore } from '~/core/stores/UserStore'
 
 const toast = useMessage()
 const userStore = useUserStore()

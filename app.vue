@@ -12,9 +12,12 @@ import {
     <n-message-provider>
       <n-modal-provider>
         <n-dialog-provider>
-          <NuxtPage />
+          <NuxtLayout>
+            <NuxtPage />
+          </NuxtLayout>
         </n-dialog-provider>
       </n-modal-provider>
     </n-message-provider>
   </n-config-provider>
+
 </template>

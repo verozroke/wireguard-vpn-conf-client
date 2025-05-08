@@ -15,6 +15,8 @@ export type ClientCreateBody = {
   userId: string
 }
 
+export type ClientEditMatcher = 'name' | 'address' | 'both'
+
 export type ClientEditBody = {
   name: string
   clientIp: string
@@ -51,6 +53,16 @@ class ClientService {
     return data
   }
 
+
+  async myClients(userId: string): Promise<Client[]> {
+    const { data } = await axios.get<Client[]>(`${this.BASE_URL}/${userId}/my-clients`, {
+      headers: this.getAuthHeaders(),
+    })
+
+    return data
+  }
+
+
   async delete(clientId: string): Promise<string> {
     await axios.delete(`${this.BASE_URL}/${clientId}`, {
       headers: this.getAuthHeaders(),
@@ -67,7 +79,34 @@ class ClientService {
     return data
   }
 
-  async edit(clientId: string, body: ClientEditBody): Promise<Client> {
+  async edit(clientId: string, body: ClientEditBody, match: ClientEditMatcher = 'both'): Promise<Client> {
+    if (match == 'name') {
+      const { data } = await axios.put<Client>(
+        `${this.BASE_URL}/${clientId}/name`,
+        {
+          name: body.name,
+        },
+        {
+          headers: this.getAuthHeaders(),
+        }
+      )
+
+      return data
+    }
+
+    if (match == 'address') {
+      const { data } = await axios.put<Client>(
+        `${this.BASE_URL}/${clientId}/address`,
+        {
+          clientIp: body.clientIp,
+        },
+        {
+          headers: this.getAuthHeaders(),
+        }
+      )
+      return data
+    }
+
     await axios.put<Client>(
       `${this.BASE_URL}/${clientId}/name`,
       {
@@ -86,7 +125,6 @@ class ClientService {
         headers: this.getAuthHeaders(),
       }
     )
-
     return data
   }
 
@@ -100,10 +138,7 @@ class ClientService {
       }
     )
 
-    const disposition = response.headers['content-disposition']
-    const fileName = disposition
-      ? disposition.split('filename=')[1].replace(/"/g, '') // Extract file name
-      : 'default_filename.txt'
+    const fileName = `configuration_${clientId}.conf`
 
     const blob = new Blob([response.data], {
       type: response.headers['content-type'],

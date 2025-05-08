@@ -1,7 +1,9 @@
 export default {
   theme: {
     extend: {
-      colors: {},
+      colors: {
+        greeny: '#18a058',
+      },
     },
   },
 }

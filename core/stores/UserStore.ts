@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { authService } from '~/core/services/auth.service'
 import type { User } from '../types/user'
-import { Role } from '../enums/Role'
+import type { Role } from '../enums/Role'
 
 export const useUserStore = defineStore('userStore', () => {
   const user = ref<User | null>(null)
@@ -22,7 +22,7 @@ export const useUserStore = defineStore('userStore', () => {
       user!.value = tokenUser
       isAuthenticated.value = true
       checkAccessRedirect()
-    } catch (error) {
+    } catch {
       router.push('/sign-in')
       localStorage.removeItem('token')
       throw new Error('Unauthorized 401')
@@ -31,16 +31,17 @@ export const useUserStore = defineStore('userStore', () => {
 
   const logout = async () => {
     try {
-      await authService.logout()
+      const message = await authService.logout()
       // toast.success('Выход из вашего аккаунта произведен успешно.')
       isAuthenticated.value = false
       router.push('/sign-in')
-    } catch (error) {
+      return message
+    } catch {
       // toast.error('Не удалось выйти из вашего аккаунта.')
     }
   }
 
-  const isAdmin = (): boolean => user.value?.role === 'Admin'
+  const isAdmin = (): boolean => user.value?.role === 'Admin' as unknown as Role
 
   const checkAccessRedirect = () => {
     const currentPath = window.location.pathname

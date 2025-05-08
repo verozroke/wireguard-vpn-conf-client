@@ -7,7 +7,10 @@
         praesentium!
       </h3>
       <subnet-add-button @click="showCreateModal = true" />
-      <SubnetAddModal v-model="showCreateModal" @add="createSubnet" />
+      <SubnetAddModal
+        v-model="showCreateModal"
+        @add="createSubnet"
+      />
       <SubnetEditModal
         v-model="showEditModal"
         :subnet="currentEditSubnet"
@@ -255,7 +258,7 @@ const getSubnets = async () => {
     const data = await subnetService.subnets()
     subnets.value = data
   } catch {
-    toast.error('Could not fetch subnets')
+    // toast.error('Could not fetch subne`ts')
   }
 }
 

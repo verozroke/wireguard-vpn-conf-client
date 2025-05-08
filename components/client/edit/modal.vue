@@ -14,31 +14,36 @@
       :rules="rules"
       :size="size"
     >
-      <NFormItem label="Client Name" path="client.name">
+      <NFormItem
+        label="Client Name"
+        path="client.name"
+      >
         <NInput
           v-model:value="formValue.client.name"
           clearable
           placeholder="Input your client name"
         />
       </NFormItem>
-      <NFormItem label="Client IP Address" path="client.clientIp">
-        <NInput
-          v-model:value="formValue.client.clientIp"
-          maxlength="15"
-          clearable
-          placeholder="Input your client IP address"
-        />
-      </NFormItem>
     </NForm>
     <template #footer>
       <div class="flex w-full justify-end gap-2">
-        <NButton secondary strong type="error" @click="model = false">
+        <NButton
+          secondary
+          strong
+          type="error"
+          @click="model = false"
+        >
           <template #icon>
             <Icon name="mdi:close" />
           </template>
           Cancel
         </NButton>
-        <NButton secondary strong type="primary" @click="emit('edit')">
+        <NButton
+          secondary
+          strong
+          type="primary"
+          @click="emit('edit', { name: formValue.client.name })"
+        >
           <template #icon>
             <Icon name="mdi:pencil" />
           </template>
@@ -58,7 +63,7 @@ import {
   NFormItem,
   NInput,
 } from 'naive-ui'
-import type { Client } from '~/core/types/subnet'
+import type { Client } from '~/core/types/client'
 
 const props = defineProps<{
   client: Client
@@ -71,7 +76,6 @@ const size = ref<'small' | 'medium' | 'large'>('medium')
 const formValue = ref({
   client: {
     name: props.client.name,
-    clientIp: props.client.clientIp,
   },
 })
 
@@ -80,11 +84,6 @@ const rules = {
     name: {
       required: true,
       message: 'Please input your client name',
-      trigger: 'blur',
-    },
-    clientIp: {
-      required: true,
-      message: 'Please input your client IP address',
       trigger: 'blur',
     },
   },

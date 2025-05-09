@@ -8,7 +8,7 @@ export type Client = {
   publicKey: string
   privateKeyRef: string
   isEnabled: boolean
-  subnetId: number
+  subnetId: string
   subnet?: Subnet
   userId: string
   user?: User

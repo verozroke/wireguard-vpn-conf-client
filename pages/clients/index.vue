@@ -6,8 +6,16 @@
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
         praesentium!
       </h3>
+      <QRCodeModal
+        v-model="qrCodeModal"
+        :qrcode="qrCodeImage"
+      />
       <client-add-button @click="showCreateModal = true" />
-      <ClientAddModal v-model="showCreateModal" @add="createClient" />
+      <ClientAddModal
+        v-model="showCreateModal"
+        @add="createClient"
+      />
+
       <ClientEditModal
         v-model="showEditModal"
         :client="currentEditClient"
@@ -15,17 +23,11 @@
       />
       <div class="w-full flex gap-4 flex-wrap py-5">
         <n-data-table
-          size="large"
           :columns="columns"
           :data="clients"
           :pagination="paginationReactive"
           :row-key="rowKey"
         />
-        <!-- <ClientAddCard @click="showCreateModal = true" /> -->
-        <!-- <ClientAddModal -->
-        <!-- v-model="showCreateModal" -->
-        <!-- @add="createClient" -->
-        <!-- /> -->
       </div>
     </div>
   </dashboard-panel>
@@ -37,6 +39,7 @@ import {
   type DataTableColumns,
   NDataTable,
   useMessage,
+  NTag,
 } from 'naive-ui'
 import type { RowData } from 'naive-ui/es/data-table/src/interface'
 import { Fragment } from 'vue/jsx-runtime'
@@ -51,7 +54,6 @@ import type { Client } from '~/core/types/client'
 const showCreateModal = ref(false)
 const showEditModal = ref(false)
 const userStore = useUserStore()
-const router = useRouter()
 const toast = useMessage()
 const rowKey = (row: RowData) => row.id
 
@@ -74,9 +76,10 @@ const paginationReactive = reactive({
 })
 
 type DataTableColumnMethods = {
-  goTo: (row: Client) => void
   deleteClient: (row: Client) => Promise<void>
   editModalHandler: (row: Client) => void
+  getQRCode: (row: Client) => Promise<void>
+  downloadConfig: (row: Client) => Promise<void>
 }
 
 const clientNameFilterOptions = computed(() =>
@@ -93,18 +96,27 @@ const clientIpFilterOptions = computed(() =>
   }))
 )
 
-const clientMaskFilterOptions = computed(() =>
+const userLoginFilterOptions = computed(() =>
   clients.value.map((client) => ({
-    label: client.clientMask.toString(),
-    value: client.clientMask.toString(),
+    label: client.user!.login,
+    value: client.user!.login,
+  }))
+)
+
+const subnetNameFilterOptions = computed(() =>
+  clients.value.map((client) => ({
+    label: client.subnet!.name,
+    value: client.subnet!.name,
   }))
 )
 
 function createColumns({
   deleteClient,
-  goTo,
   editModalHandler,
+  getQRCode,
+  downloadConfig
 }: DataTableColumnMethods): DataTableColumns<Client> {
+
   return [
     {
       title: 'ID',
@@ -134,14 +146,77 @@ function createColumns({
       resizable: true,
     },
     {
-      title: 'Client Mask',
-      key: 'clientMask',
-      sorter: (row1, row2) => row1.clientMask - row2.clientMask,
-      filterOptions: clientMaskFilterOptions.value,
-      filter(value, row) {
-        return !!~row.clientMask.toString().indexOf(String(value))
-      },
+      title: 'Public Key',
+      key: 'publicKey',
       resizable: true,
+    },
+    {
+      title: 'Private Key Reference',
+      key: 'privateKeyRef',
+      resizable: true,
+    },
+    {
+      title: 'Status',
+      key: 'isEnabled',
+      resizable: true,
+      render(row) {
+        return h(
+          'span',
+          {},
+          {
+            default: () => row.isEnabled.toString()
+          }
+        )
+      }
+      // TODO: make the custom cell for this column 
+    },
+    {
+      title: 'Subnet Name',
+      key: 'subnet.name',
+      resizable: true,
+      filterOptions: subnetNameFilterOptions.value,
+      filter(value, row) {
+        return !!~row.subnet!.name.indexOf(String(value))
+      },
+      render(row) {
+        return h(
+          NTag,
+          {
+            style: {
+              marginRight: '6px',
+            },
+            type: 'info',
+            bordered: false,
+          },
+          {
+            default: () => row.subnet?.name,
+          }
+        )
+      },
+    },
+    {
+      title: 'User Login',
+      key: 'user.login',
+      resizable: true,
+      filterOptions: userLoginFilterOptions.value,
+      filter(value, row) {
+        return !!~row.user!.login.indexOf(String(value))
+      },
+      render(row) {
+        return h(
+          NTag,
+          {
+            style: {
+              marginRight: '6px',
+            },
+            type: 'success',
+            bordered: false,
+          },
+          {
+            default: () => row.user?.login,
+          }
+        )
+      },
     },
     {
       title: 'Action',
@@ -154,19 +229,8 @@ function createColumns({
               strong: true,
               tertiary: true,
               size: 'small',
-              color: '#18a058',
-              onClick: () => goTo(row),
-            },
-            { default: () => 'Go To' }
-          ),
-          h(
-            NButton,
-            {
-              strong: true,
-              tertiary: true,
-              size: 'small',
               color: '#f0a020',
-              style: { marginLeft: '8px' }, // чтобы кнопки не слипались
+              style: { marginLeft: '8px', marginBottom: '8px' }, // чтобы кнопки не слипались
               onClick: () => editModalHandler(row),
             },
             { default: () => 'Edit' }
@@ -183,6 +247,30 @@ function createColumns({
             },
             { default: () => 'Delete' }
           ),
+          h(
+            NButton,
+            {
+              strong: true,
+              tertiary: true,
+              size: 'small',
+              color: '#18a058',
+              style: { marginLeft: '8px' },
+              onClick: () => downloadConfig(row),
+            },
+            { default: () => 'Download Configuration' }
+          ),
+          h(
+            NButton,
+            {
+              strong: true,
+              tertiary: true,
+              size: 'small',
+              color: '#18a058',
+              style: { marginLeft: '8px' },
+              onClick: () => getQRCode(row),
+            },
+            { default: () => 'Get QR Code' }
+          ),
         ])
       },
       resizable: true,
@@ -191,11 +279,10 @@ function createColumns({
 }
 
 const columns = createColumns({
-  goTo(row: Client) {
-    router.push(`/clients/${row.id}`)
-  },
   deleteClient,
   editModalHandler,
+  getQRCode,
+  downloadConfig,
 })
 
 async function deleteClient(client: Client) {
@@ -212,6 +299,7 @@ async function editClient(client: Client) {
   try {
     const body: ClientEditBody = { ...client }
     const data = await clientService.edit(client.id, body)
+
     const clientIdx = clients.value.findIndex((client) => client.id === data.id)
     if (clientIdx === -1) return
     clients.value[clientIdx] = data
@@ -230,14 +318,11 @@ function editModalHandler(client: Client) {
 
 const createClient = async (client: Omit<Client, 'id'>) => {
   try {
-    if (!userStore.user) {
-      return
-    }
     const body: ClientCreateBody = {
       name: client.name,
       clientIp: client.clientIp,
-      clientMask: client.clientMask,
-      userId: userStore.user.id,
+      userId: client.userId,
+      subnetId: client.subnetId
     }
 
     const data = await clientService.create(body)
@@ -256,6 +341,33 @@ const getClients = async () => {
     clients.value = data
   } catch {
     toast.error('Could not fetch clients')
+  }
+}
+
+
+const qrCodeImage = ref<string>('')
+const qrCodeModal = ref(false)
+
+async function downloadConfig(client: Client) {
+  try {
+    const clientId = client.id
+    const message = await clientService.configuration(clientId)
+    toast.success(message)
+  } catch {
+    toast.error('Could not download configuration.')
+  }
+}
+
+
+async function getQRCode(client: Client) {
+  try {
+    const clientId = client.id
+    const qrcode = await clientService.qrcode(clientId)
+    qrCodeImage.value = `data:image/png;base64,${qrcode}`
+    qrCodeModal.value = true
+    toast.success('Scan this QR Code to get the configuration.')
+  } catch {
+    toast.error('Could not download configuration QR Code.')
   }
 }
 

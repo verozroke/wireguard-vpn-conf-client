@@ -41,6 +41,14 @@ class UserService {
     return data
   }
 
+  async employees(): Promise<User[]> {
+    const { data } = await axios.get<User[]>(`${this.BASE_URL}/employees`, {
+      headers: this.getAuthHeaders(),
+    })
+
+    return data
+  }
+
   async delete(userId: string): Promise<string> {
     await axios.delete(`${this.BASE_URL}/${userId}`, {
       headers: this.getAuthHeaders(),

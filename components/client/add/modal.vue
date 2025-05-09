@@ -35,6 +35,30 @@
           placeholder="Input your client IP address"
         />
       </NFormItem>
+      <NFormItem
+        label="Client's Subnet"
+        path="client.subnetId"
+      >
+        <n-select
+          v-model:value="formValue.client.subnetId"
+          filterable
+          tag
+          :options="subnetOptions"
+        />
+      </NFormItem>
+      <NFormItem
+        label="Client's User"
+        path="client.userId"
+      >
+        <n-select
+          v-model:value="formValue.client.userId"
+          filterable
+          tag
+          :options="userOptions"
+        />
+      </NFormItem>
+      <!-- form item with select of subnets -->
+      <!-- form item with select of users (who is employee) TODO: make the endpoint for the users that will fetch only the users with role of employee -->
     </NForm>
     <template #footer>
       <div class="flex w-full justify-end gap-2">
@@ -53,7 +77,7 @@
           secondary
           strong
           type="primary"
-          @click="emit('add')"
+          @click="emit('add', formValue.client)"
         >
           <template #icon>
             <Icon name="mdi:plus" />
@@ -73,22 +97,36 @@ import {
   NForm,
   NFormItem,
   NInput,
+  NSelect,
+  useMessage
 } from 'naive-ui'
+import { subnetService } from '~/core/services/subnet.service'
+import { userService } from '~/core/services/user.service'
+
+
+export type SelectOptions = {
+  label: string
+  value: string
+}
+
 
 const model = defineModel<boolean>()
 const emit = defineEmits(['add'])
 
+const toast = useMessage()
 const formRef = ref<FormInst | null>(null)
 const size = ref<'small' | 'medium' | 'large'>('medium')
 const formValue = ref({
   client: {
     name: '',
     clientIp: '',
+    userId: '',
+    subnetId: '',
   },
 })
 
 const rules = {
-  subnet: {
+  client: {
     name: {
       required: true,
       message: 'Please input your client name',
@@ -101,6 +139,46 @@ const rules = {
     },
   },
 }
+
+
+
+const subnetOptions = ref<SelectOptions[]>([])
+const userOptions = ref<SelectOptions[]>([])
+
+async function getSubnetOptions() {
+  try {
+    const subnetData = await subnetService.subnets()
+    subnetOptions.value = subnetData.map(subnet => ({
+      label: `${subnet.name} | ${subnet.subnetIp}/${subnet.subnetMask}`,
+      value: subnet.id
+    }))
+
+
+  } catch {
+    toast.error('Could not fetch subnets for the options.')
+  }
+}
+
+
+async function getUserOptions() {
+  try {
+    const userData = await userService.employees()
+    userOptions.value = userData.map(user => ({
+      label: `${user.login} | ${user.role}`,
+      value: user.id
+    }))
+  } catch {
+    toast.error('Could not fetch users for the options.')
+  }
+}
+
+
+
+watch(model, () => {
+  if (!model.value || (subnetOptions.value.length > 0 && userOptions.value.length > 0)) return
+  Promise.all([getSubnetOptions(), getUserOptions()])
+})
+
 </script>
 
 <style scoped></style>

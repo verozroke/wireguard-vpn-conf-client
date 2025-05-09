@@ -14,20 +14,14 @@
       :rules="rules"
       :size="size"
     >
-      <NFormItem
-        label="Client Name"
-        path="client.name"
-      >
+      <NFormItem label="Client Name" path="client.name">
         <NInput
           v-model:value="formValue.client.name"
           clearable
           placeholder="Input your client name"
         />
       </NFormItem>
-      <NFormItem
-        label="Client IP Address"
-        path="client.clientIp"
-      >
+      <NFormItem label="Client IP Address" path="client.clientIp">
         <NInput
           v-model:value="formValue.client.clientIp"
           clearable
@@ -37,12 +31,7 @@
     </NForm>
     <template #footer>
       <div class="flex w-full justify-end gap-2">
-        <NButton
-          secondary
-          strong
-          type="error"
-          @click="model = false"
-        >
+        <NButton secondary strong type="error" @click="model = false">
           <template #icon>
             <Icon name="mdi:close" />
           </template>
@@ -52,7 +41,13 @@
           secondary
           strong
           type="primary"
-          @click="emit('edit', { ...props.client, name: formValue.client.name, clientIp: formValue.client.clientIp })"
+          @click="
+            emit('edit', {
+              ...props.client,
+              name: formValue.client.name,
+              clientIp: formValue.client.clientIp,
+            })
+          "
         >
           <template #icon>
             <Icon name="mdi:pencil" />
@@ -86,7 +81,7 @@ const size = ref<'small' | 'medium' | 'large'>('medium')
 const formValue = ref({
   client: {
     name: props.client?.name,
-    clientIp: props.client?.clientIp
+    clientIp: props.client?.clientIp,
   },
 })
 
@@ -105,14 +100,16 @@ const rules = {
   },
 }
 
-watch(() => props.client,
+watch(
+  () => props.client,
   (newClient) => {
     formValue.value.client = {
       name: newClient?.name,
       clientIp: newClient?.clientIp,
     }
   },
-  { immediate: true })
+  { immediate: true }
+)
 </script>
 
 <style scoped></style>

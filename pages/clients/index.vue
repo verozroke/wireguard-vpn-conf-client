@@ -6,15 +6,9 @@
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
         praesentium!
       </h3>
-      <QRCodeModal
-        v-model="qrCodeModal"
-        :qrcode="qrCodeImage"
-      />
+      <QRCodeModal v-model="qrCodeModal" :qrcode="qrCodeImage" />
       <client-add-button @click="showCreateModal = true" />
-      <ClientAddModal
-        v-model="showCreateModal"
-        @add="createClient"
-      />
+      <ClientAddModal v-model="showCreateModal" @add="createClient" />
 
       <ClientEditModal
         v-model="showEditModal"
@@ -114,9 +108,8 @@ function createColumns({
   deleteClient,
   editModalHandler,
   getQRCode,
-  downloadConfig
+  downloadConfig,
 }: DataTableColumnMethods): DataTableColumns<Client> {
-
   return [
     {
       title: 'ID',
@@ -164,11 +157,11 @@ function createColumns({
           'span',
           {},
           {
-            default: () => row.isEnabled.toString()
+            default: () => row.isEnabled.toString(),
           }
         )
-      }
-      // TODO: make the custom cell for this column 
+      },
+      // TODO: make the custom cell for this column
     },
     {
       title: 'Subnet Name',
@@ -322,7 +315,7 @@ const createClient = async (client: Omit<Client, 'id'>) => {
       name: client.name,
       clientIp: client.clientIp,
       userId: client.userId,
-      subnetId: client.subnetId
+      subnetId: client.subnetId,
     }
 
     const data = await clientService.create(body)
@@ -344,7 +337,6 @@ const getClients = async () => {
   }
 }
 
-
 const qrCodeImage = ref<string>('')
 const qrCodeModal = ref(false)
 
@@ -357,7 +349,6 @@ async function downloadConfig(client: Client) {
     toast.error('Could not download configuration.')
   }
 }
-
 
 async function getQRCode(client: Client) {
   try {

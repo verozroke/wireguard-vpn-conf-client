@@ -7,7 +7,7 @@
     :bordered="false"
     size="huge"
   >
-    <img class="mx-auto" :src="qrcode" >
+    <img class="mx-auto" :src="qrcode" />
     <template #footer>
       <div class="flex w-full justify-end gap-2">
         <NButton secondary strong type="error" @click="model = false">

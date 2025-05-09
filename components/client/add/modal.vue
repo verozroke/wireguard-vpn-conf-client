@@ -14,20 +14,14 @@
       :rules="rules"
       :size="size"
     >
-      <NFormItem
-        label="Client Name"
-        path="client.name"
-      >
+      <NFormItem label="Client Name" path="client.name">
         <NInput
           v-model:value="formValue.client.name"
           clearable
           placeholder="Input your client name"
         />
       </NFormItem>
-      <NFormItem
-        label="Client IP Address"
-        path="client.clientIp"
-      >
+      <NFormItem label="Client IP Address" path="client.clientIp">
         <NInput
           v-model:value="formValue.client.clientIp"
           maxlength="15"
@@ -35,10 +29,7 @@
           placeholder="Input your client IP address"
         />
       </NFormItem>
-      <NFormItem
-        label="Client's Subnet"
-        path="client.subnetId"
-      >
+      <NFormItem label="Client's Subnet" path="client.subnetId">
         <n-select
           v-model:value="formValue.client.subnetId"
           filterable
@@ -46,10 +37,7 @@
           :options="subnetOptions"
         />
       </NFormItem>
-      <NFormItem
-        label="Client's User"
-        path="client.userId"
-      >
+      <NFormItem label="Client's User" path="client.userId">
         <n-select
           v-model:value="formValue.client.userId"
           filterable
@@ -62,12 +50,7 @@
     </NForm>
     <template #footer>
       <div class="flex w-full justify-end gap-2">
-        <NButton
-          secondary
-          strong
-          type="error"
-          @click="model = false"
-        >
+        <NButton secondary strong type="error" @click="model = false">
           <template #icon>
             <Icon name="mdi:close" />
           </template>
@@ -98,17 +81,15 @@ import {
   NFormItem,
   NInput,
   NSelect,
-  useMessage
+  useMessage,
 } from 'naive-ui'
 import { subnetService } from '~/core/services/subnet.service'
 import { userService } from '~/core/services/user.service'
-
 
 export type SelectOptions = {
   label: string
   value: string
 }
-
 
 const model = defineModel<boolean>()
 const emit = defineEmits(['add'])
@@ -140,45 +121,41 @@ const rules = {
   },
 }
 
-
-
 const subnetOptions = ref<SelectOptions[]>([])
 const userOptions = ref<SelectOptions[]>([])
 
 async function getSubnetOptions() {
   try {
     const subnetData = await subnetService.subnets()
-    subnetOptions.value = subnetData.map(subnet => ({
+    subnetOptions.value = subnetData.map((subnet) => ({
       label: `${subnet.name} | ${subnet.subnetIp}/${subnet.subnetMask}`,
-      value: subnet.id
+      value: subnet.id,
     }))
-
-
   } catch {
     toast.error('Could not fetch subnets for the options.')
   }
 }
 
-
 async function getUserOptions() {
   try {
     const userData = await userService.employees()
-    userOptions.value = userData.map(user => ({
+    userOptions.value = userData.map((user) => ({
       label: `${user.login} | ${user.role}`,
-      value: user.id
+      value: user.id,
     }))
   } catch {
     toast.error('Could not fetch users for the options.')
   }
 }
 
-
-
 watch(model, () => {
-  if (!model.value || (subnetOptions.value.length > 0 && userOptions.value.length > 0)) return
+  if (
+    !model.value ||
+    (subnetOptions.value.length > 0 && userOptions.value.length > 0)
+  )
+    return
   Promise.all([getSubnetOptions(), getUserOptions()])
 })
-
 </script>
 
 <style scoped></style>

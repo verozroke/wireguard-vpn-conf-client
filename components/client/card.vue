@@ -22,11 +22,11 @@
         <Icon name="line-md:hash" />
       </template>
     </n-tag>
-    <br >
+    <br />
     <span class="font-medium text-slate-700 leading-loose"
       ><b>IP-address:</b> {{ client.clientIp }}/24</span
     >
-    <br >
+    <br />
     <!-- <span class="font-medium text-slate-700 leading-loose"><b>Public Key:</b>
       <div class="truncate w-64">{{ client.publicKey }}</div>
     </span>

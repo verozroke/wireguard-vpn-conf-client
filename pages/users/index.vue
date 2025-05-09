@@ -6,26 +6,29 @@
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
         praesentium!
       </h3>
-      <subnet-add-button @click="showCreateModal = true" />
-      <SubnetAddModal v-model="showCreateModal" @add="createSubnet" />
-      <SubnetEditModal
+      <user-add-button @click="showCreateModal = true" />
+      <UserAddModal
+        v-model="showCreateModal"
+        @add="createUser"
+      />
+      <UserEditModal
         v-model="showEditModal"
-        :subnet="currentEditSubnet"
-        @edit="editSubnet"
+        :user="currentEditUser"
+        @edit="editUser"
+      />
+      <UserChangePasswordModal
+        v-model="showChangePasswordModal"
+        :user="currentChangePasswordUser"
+        @change-password="changePassword"
       />
       <div class="w-full flex gap-4 flex-wrap py-5">
         <n-data-table
           size="large"
           :columns="columns"
-          :data="subnets"
+          :data="users"
           :pagination="paginationReactive"
           :row-key="rowKey"
         />
-        <!-- <SubnetAddCard @click="showCreateModal = true" /> -->
-        <!-- <SubnetAddModal -->
-        <!-- v-model="showCreateModal" -->
-        <!-- @add="createSubnet" -->
-        <!-- /> -->
       </div>
     </div>
   </dashboard-panel>
@@ -37,27 +40,31 @@ import {
   type DataTableColumns,
   NDataTable,
   useMessage,
+  NTag,
 } from 'naive-ui'
 import type { RowData } from 'naive-ui/es/data-table/src/interface'
 import { Fragment } from 'vue/jsx-runtime'
+import { authService, type ChangePasswordBody } from '~/core/services/auth.service'
+// TODO: make user service
 import {
-  subnetService,
-  type SubnetCreateBody,
-  type SubnetEditBody,
-} from '~/core/services/subnet.service'
+  userService,
+  type UserCreateBody,
+  type UserEditBody,
+} from '~/core/services/user.service'
 import { useUserStore } from '~/core/stores/UserStore'
-import type { Subnet } from '~/core/types/subnet'
+import type { User } from '~/core/types/user'
 
 const showCreateModal = ref(false)
 const showEditModal = ref(false)
+const showChangePasswordModal = ref(false)
 const userStore = useUserStore()
-const router = useRouter()
 const toast = useMessage()
 const rowKey = (row: RowData) => row.id
 
-const subnets = ref<Subnet[]>([])
+const users = ref<User[]>([])
 
-const currentEditSubnet = ref<Subnet | null>(null)
+const currentEditUser = ref<User | null>(null)
+const currentChangePasswordUser = ref<User | null>(null)
 
 const paginationReactive = reactive({
   page: 1,
@@ -74,37 +81,37 @@ const paginationReactive = reactive({
 })
 
 type DataTableColumnMethods = {
-  goTo: (row: Subnet) => void
-  deleteSubnet: (row: Subnet) => Promise<void>
-  editModalHandler: (row: Subnet) => void
+  deleteUser: (row: User) => Promise<void>
+  editModalHandler: (row: User) => void
+  changePasswordModalHandler: (row: User) => void
 }
 
-const subnetNameFilterOptions = computed(() =>
-  subnets.value.map((subnet) => ({
-    label: subnet.name,
-    value: subnet.name,
+
+// TODO: change the filter options for the user
+const loginFilterOptions = computed(() =>
+  users.value.map((user) => ({
+    label: user.login,
+    value: user.login,
   }))
 )
 
-const subnetIpFilterOptions = computed(() =>
-  subnets.value.map((subnet) => ({
-    label: subnet.subnetIp,
-    value: subnet.subnetIp,
-  }))
-)
 
-const subnetMaskFilterOptions = computed(() =>
-  subnets.value.map((subnet) => ({
-    label: subnet.subnetMask.toString(),
-    value: subnet.subnetMask.toString(),
-  }))
-)
+const roleFilterOptions = [
+  {
+    label: 'Admin',
+    value: 'Admin'
+  },
+  {
+    label: 'Employee',
+    value: 'Employee'
+  },
+]
 
 function createColumns({
-  deleteSubnet,
-  goTo,
+  deleteUser,
   editModalHandler,
-}: DataTableColumnMethods): DataTableColumns<Subnet> {
+  changePasswordModalHandler
+}: DataTableColumnMethods): DataTableColumns<User> {
   return [
     {
       title: 'ID',
@@ -112,53 +119,62 @@ function createColumns({
       resizable: true,
     },
     {
-      title: 'Name',
-      key: 'name',
-      sorter: (row1, row2) => row1.name.localeCompare(row2.name),
+      title: 'Login',
+      key: 'login',
+      sorter: (row1, row2) => row1.login.localeCompare(row2.login),
       defaultFilterOptionValues: [],
       // FIXME: change the filter options to by the values of our data table
-      filterOptions: subnetNameFilterOptions.value,
+      filterOptions: loginFilterOptions.value,
       filter(value, row) {
-        return !!~row.name.indexOf(String(value))
+        return !!~row.login.indexOf(String(value))
       },
       resizable: true,
     },
     {
-      title: 'Subnet IP',
-      key: 'subnetIp',
-      sorter: (row1, row2) => row1.subnetIp.localeCompare(row2.subnetIp),
-      filterOptions: subnetIpFilterOptions.value,
+      title: 'Role',
+      key: 'role',
+      sorter: (row1, row2) => row1.role.localeCompare(row2.role),
+      filterOptions: roleFilterOptions,
       filter(value, row) {
-        return !!~row.subnetIp.indexOf(String(value))
+        return !!~row.role.indexOf(String(value))
       },
       resizable: true,
-    },
-    {
-      title: 'Subnet Mask',
-      key: 'subnetMask',
-      sorter: (row1, row2) => row1.subnetMask - row2.subnetMask,
-      filterOptions: subnetMaskFilterOptions.value,
-      filter(value, row) {
-        return !!~row.subnetMask.toString().indexOf(String(value))
-      },
-      resizable: true,
+      render(row) {
+        if (row.role == 'Admin') {
+          return h(
+            NTag,
+            {
+              style: {
+                marginRight: '6px'
+              },
+              type: 'success',
+              bordered: false
+            },
+            {
+              default: () => row.role
+            }
+          )
+        }
+        return h(
+          NTag,
+          {
+            style: {
+              marginRight: '6px'
+            },
+            type: 'info',
+            bordered: false
+          },
+          {
+            default: () => row.role
+          }
+        )
+      }
     },
     {
       title: 'Action',
       key: 'actions',
       render(row) {
         return h(Fragment, {}, [
-          h(
-            NButton,
-            {
-              strong: true,
-              tertiary: true,
-              size: 'small',
-              color: '#18a058',
-              onClick: () => goTo(row),
-            },
-            { default: () => 'Go To' }
-          ),
           h(
             NButton,
             {
@@ -179,9 +195,21 @@ function createColumns({
               size: 'small',
               color: '#d03050',
               style: { marginLeft: '8px' },
-              onClick: () => deleteSubnet(row),
+              onClick: () => deleteUser(row),
             },
             { default: () => 'Delete' }
+          ),
+          h(
+            NButton,
+            {
+              strong: true,
+              tertiary: true,
+              size: 'small',
+              color: '#18a058',
+              style: { marginLeft: '8px' },
+              onClick: () => changePasswordModalHandler(row),
+            },
+            { default: () => 'Change Password' }
           ),
         ])
       },
@@ -191,77 +219,102 @@ function createColumns({
 }
 
 const columns = createColumns({
-  goTo(row: Subnet) {
-    router.push(`/subnets/${row.id}`)
-  },
-  deleteSubnet,
+  deleteUser,
   editModalHandler,
+  changePasswordModalHandler,
 })
 
-async function deleteSubnet(subnet: Subnet) {
+
+function changePasswordModalHandler(user: User) {
+  currentChangePasswordUser.value = user
+  showChangePasswordModal.value = true
+}
+
+async function changePassword(user: User & { oldPassword: string, newPassword: string }) {
   try {
-    const message = await subnetService.delete(subnet.id)
+    const body: ChangePasswordBody = {
+      userId: user.id,
+      newPassword: user.newPassword,
+      oldPassword: user.oldPassword,
+    }
+    await authService.changePassword(body)
+    toast.success('Password changed successfully.')
+    showChangePasswordModal.value = false
+  } catch {
+    toast.error('Could not change the password.')
+    showChangePasswordModal.value = false
+  }
+}
+
+async function deleteUser(user: User) {
+  try {
+    const message = await userService.delete(user.id)
     toast.success(message)
-    subnets.value = subnets.value.filter((item) => item.id !== subnet.id)
-  } catch {
-    toast.error('Could not delete the subnet.')
+    users.value = users.value.filter((item) => item.id !== user.id)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    if (error.response.data.detail == 'Error deleting user: Foreign key constraint failed on the field: `Client_userId_fkey (index)`') {
+      toast.error('User has the clients attached to him. Delete the clients of the user first')
+      return
+    }
+    toast.error('Could not delete the user.')
   }
 }
 
-async function editSubnet(subnet: Subnet) {
+async function editUser(user: User) {
   try {
-    const body: SubnetEditBody = { ...subnet }
-    const data = await subnetService.edit(subnet.id, body)
-    const subnetIdx = subnets.value.findIndex((subnet) => subnet.id === data.id)
-    if (subnetIdx === -1) return
-    subnets.value[subnetIdx] = data
-    toast.success('Subnet edited successfully.')
+    const body: UserEditBody = { login: user.login }
+    const data = await userService.edit(user.id, body)
+    const userIdx = users.value.findIndex((user) => user.id === data.id)
+    if (userIdx === -1) return
+    users.value[userIdx] = data
+    toast.success('User edited successfully.')
     showEditModal.value = false
   } catch {
-    toast.error('Could not edit the subnet.')
+    toast.error('Could not edit the user.')
     showEditModal.value = false
   }
 }
 
-function editModalHandler(subnet: Subnet) {
-  currentEditSubnet.value = subnet
+function editModalHandler(user: User) {
+  currentEditUser.value = user
   showEditModal.value = true
 }
 
-const createSubnet = async (subnet: Omit<Subnet, 'id'>) => {
+const createUser = async (user: Omit<User, 'id'> & { password: string }) => {
   try {
     if (!userStore.user) {
       return
     }
-    const body: SubnetCreateBody = {
-      name: subnet.name,
-      subnetIp: subnet.subnetIp,
-      subnetMask: subnet.subnetMask,
-      userId: userStore.user.id,
+
+    const body: UserCreateBody = {
+      login: user.login,
+      password: user.password,
+      is_admin: user.role === 'Admin',
     }
 
-    const data = await subnetService.create(body)
-    subnets.value.push(data)
+    const data = await userService.create(body)
+    users.value.push(data)
     showCreateModal.value = false
-    toast.success('Subnet was created successfully.')
+    toast.success('User was created successfully.')
   } catch {
     showCreateModal.value = false
-    toast.error('Could not create the subnet.')
+    toast.error('Could not create the user.')
   }
 }
 
-const getSubnets = async () => {
+const getUsers = async () => {
   try {
-    const data = await subnetService.subnets()
-    subnets.value = data
+    const data = await userService.users()
+    users.value = data
   } catch {
-    toast.error('Could not fetch subnets')
+    toast.error('Could not fetch users')
   }
 }
 
 onMounted(async () => {
   await userStore.getUser()
-  await getSubnets()
+  await getUsers()
 })
 </script>
 

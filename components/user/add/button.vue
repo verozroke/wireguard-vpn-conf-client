@@ -1,9 +1,14 @@
 <template>
-  <NButton round type="primary" quaternary class="w-8 h-9">
+  <n-button
+    class="w-fit"
+    type="primary"
+    icon-placement="left"
+  >
     <template #icon>
-      <Icon name="mdi:delete" />
+      <Icon name="mdi:plus" />
     </template>
-  </NButton>
+    <span>Create User</span>
+  </n-button>
 </template>
 
 <script setup lang="ts">

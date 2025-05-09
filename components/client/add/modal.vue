@@ -14,14 +14,20 @@
       :rules="rules"
       :size="size"
     >
-      <NFormItem label="Client Name" path="client.name">
+      <NFormItem
+        label="Client Name"
+        path="client.name"
+      >
         <NInput
           v-model:value="formValue.client.name"
           clearable
           placeholder="Input your client name"
         />
       </NFormItem>
-      <NFormItem label="Client IP Address" path="client.clientIp">
+      <NFormItem
+        label="Client IP Address"
+        path="client.clientIp"
+      >
         <NInput
           v-model:value="formValue.client.clientIp"
           maxlength="15"
@@ -32,13 +38,23 @@
     </NForm>
     <template #footer>
       <div class="flex w-full justify-end gap-2">
-        <NButton secondary strong type="error" @click="model = false">
+        <NButton
+          secondary
+          strong
+          type="error"
+          @click="model = false"
+        >
           <template #icon>
             <Icon name="mdi:close" />
           </template>
           Cancel
         </NButton>
-        <NButton secondary strong type="primary" @click="emit('add')">
+        <NButton
+          secondary
+          strong
+          type="primary"
+          @click="emit('add')"
+        >
           <template #icon>
             <Icon name="mdi:plus" />
           </template>
@@ -58,7 +74,6 @@ import {
   NFormItem,
   NInput,
 } from 'naive-ui'
-import type { Client } from '~/core/types/subnet'
 
 const model = defineModel<boolean>()
 const emit = defineEmits(['add'])

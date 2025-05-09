@@ -14,10 +14,7 @@
       :rules="rules"
       :size="size"
     >
-      <NFormItem
-        label="Old Password"
-        path="user.oldPassword"
-      >
+      <NFormItem label="Old Password" path="user.oldPassword">
         <NInput
           v-model:value="formValue.user.oldPassword"
           type="password"
@@ -27,10 +24,7 @@
           placeholder="Input your old password"
         />
       </NFormItem>
-      <NFormItem
-        label="New Password"
-        path="user.newPassword"
-      >
+      <NFormItem label="New Password" path="user.newPassword">
         <NInput
           v-model:value="formValue.user.newPassword"
           type="password"
@@ -43,12 +37,7 @@
     </NForm>
     <template #footer>
       <div class="flex w-full justify-end gap-2">
-        <NButton
-          secondary
-          strong
-          type="error"
-          @click="model = false"
-        >
+        <NButton secondary strong type="error" @click="model = false">
           <template #icon>
             <Icon name="mdi:close" />
           </template>
@@ -111,7 +100,6 @@ const rules = {
     },
   },
 }
-
 </script>
 
 <style scoped></style>

@@ -68,7 +68,6 @@ class UserService {
       }
     )
 
-
     return data
   }
 }

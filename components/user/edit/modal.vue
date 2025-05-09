@@ -14,10 +14,7 @@
       :rules="rules"
       :size="size"
     >
-      <NFormItem
-        label="Login"
-        path="user.login"
-      >
+      <NFormItem label="Login" path="user.login">
         <NInput
           v-model:value="formValue.user.login"
           clearable
@@ -27,12 +24,7 @@
     </NForm>
     <template #footer>
       <div class="flex w-full justify-end gap-2">
-        <NButton
-          secondary
-          strong
-          type="error"
-          @click="model = false"
-        >
+        <NButton secondary strong type="error" @click="model = false">
           <template #icon>
             <Icon name="mdi:close" />
           </template>

@@ -7,10 +7,7 @@
         praesentium!
       </h3>
       <user-add-button @click="showCreateModal = true" />
-      <UserAddModal
-        v-model="showCreateModal"
-        @add="createUser"
-      />
+      <UserAddModal v-model="showCreateModal" @add="createUser" />
       <UserEditModal
         v-model="showEditModal"
         :user="currentEditUser"
@@ -44,7 +41,10 @@ import {
 } from 'naive-ui'
 import type { RowData } from 'naive-ui/es/data-table/src/interface'
 import { Fragment } from 'vue/jsx-runtime'
-import { authService, type ChangePasswordBody } from '~/core/services/auth.service'
+import {
+  authService,
+  type ChangePasswordBody,
+} from '~/core/services/auth.service'
 // TODO: make user service
 import {
   userService,
@@ -86,7 +86,6 @@ type DataTableColumnMethods = {
   changePasswordModalHandler: (row: User) => void
 }
 
-
 // TODO: change the filter options for the user
 const loginFilterOptions = computed(() =>
   users.value.map((user) => ({
@@ -95,22 +94,21 @@ const loginFilterOptions = computed(() =>
   }))
 )
 
-
 const roleFilterOptions = [
   {
     label: 'Admin',
-    value: 'Admin'
+    value: 'Admin',
   },
   {
     label: 'Employee',
-    value: 'Employee'
+    value: 'Employee',
   },
 ]
 
 function createColumns({
   deleteUser,
   editModalHandler,
-  changePasswordModalHandler
+  changePasswordModalHandler,
 }: DataTableColumnMethods): DataTableColumns<User> {
   return [
     {
@@ -145,13 +143,13 @@ function createColumns({
             NTag,
             {
               style: {
-                marginRight: '6px'
+                marginRight: '6px',
               },
               type: 'success',
-              bordered: false
+              bordered: false,
             },
             {
-              default: () => row.role
+              default: () => row.role,
             }
           )
         }
@@ -159,16 +157,16 @@ function createColumns({
           NTag,
           {
             style: {
-              marginRight: '6px'
+              marginRight: '6px',
             },
             type: 'info',
-            bordered: false
+            bordered: false,
           },
           {
-            default: () => row.role
+            default: () => row.role,
           }
         )
-      }
+      },
     },
     {
       title: 'Action',
@@ -224,13 +222,14 @@ const columns = createColumns({
   changePasswordModalHandler,
 })
 
-
 function changePasswordModalHandler(user: User) {
   currentChangePasswordUser.value = user
   showChangePasswordModal.value = true
 }
 
-async function changePassword(user: User & { oldPassword: string, newPassword: string }) {
+async function changePassword(
+  user: User & { oldPassword: string; newPassword: string }
+) {
   try {
     const body: ChangePasswordBody = {
       userId: user.id,
@@ -253,8 +252,13 @@ async function deleteUser(user: User) {
     users.value = users.value.filter((item) => item.id !== user.id)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    if (error.response.data.detail == 'Error deleting user: Foreign key constraint failed on the field: `Client_userId_fkey (index)`') {
-      toast.error('User has the clients attached to him. Delete the clients of the user first')
+    if (
+      error.response.data.detail ==
+      'Error deleting user: Foreign key constraint failed on the field: `Client_userId_fkey (index)`'
+    ) {
+      toast.error(
+        'User has the clients attached to him. Delete the clients of the user first'
+      )
       return
     }
     toast.error('Could not delete the user.')

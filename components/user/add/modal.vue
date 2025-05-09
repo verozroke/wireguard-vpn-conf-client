@@ -14,20 +14,14 @@
       :rules="rules"
       :size="size"
     >
-      <NFormItem
-        label="Login"
-        path="user.login"
-      >
+      <NFormItem label="Login" path="user.login">
         <NInput
           v-model:value="formValue.user.login"
           clearable
           placeholder="Input your login"
         />
       </NFormItem>
-      <NFormItem
-        label="Password"
-        path="user.password"
-      >
+      <NFormItem label="Password" path="user.password">
         <NInput
           v-model:value="formValue.user.password"
           type="password"
@@ -37,10 +31,7 @@
           placeholder="Input your password"
         />
       </NFormItem>
-      <NFormItem
-        label="Role"
-        path="user.role"
-      >
+      <NFormItem label="Role" path="user.role">
         <n-radio-group
           v-model:value="formValue.user.role"
           name="radiobuttongroup1"
@@ -56,12 +47,7 @@
     </NForm>
     <template #footer>
       <div class="flex w-full justify-end gap-2">
-        <NButton
-          secondary
-          strong
-          type="error"
-          @click="model = false"
-        >
+        <NButton secondary strong type="error" @click="model = false">
           <template #icon>
             <Icon name="mdi:close" />
           </template>
@@ -92,16 +78,13 @@ import {
   NFormItem,
   NInput,
   NRadioGroup,
-  NRadioButton
+  NRadioButton,
 } from 'naive-ui'
 
 const model = defineModel<boolean>()
 const emit = defineEmits(['add'])
 
-const roles = ref([
-  { value: 'Admin' },
-  { value: 'Employee' },
-])
+const roles = ref([{ value: 'Admin' }, { value: 'Employee' }])
 
 const formRef = ref<FormInst | null>(null)
 const size = ref<'small' | 'medium' | 'large'>('medium')

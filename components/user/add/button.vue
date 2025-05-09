@@ -1,9 +1,5 @@
 <template>
-  <n-button
-    class="w-fit"
-    type="primary"
-    icon-placement="left"
-  >
+  <n-button class="w-fit" type="primary" icon-placement="left">
     <template #icon>
       <Icon name="mdi:plus" />
     </template>

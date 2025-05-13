@@ -6,9 +6,15 @@
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
         praesentium!
       </h3>
-      <QRCodeModal v-model="qrCodeModal" :qrcode="qrCodeImage" />
+      <QRCodeModal
+        v-model="qrCodeModal"
+        :qrcode="qrCodeImage"
+      />
       <client-add-button @click="showCreateModal = true" />
-      <ClientAddModal v-model="showCreateModal" @add="createClient" />
+      <ClientAddModal
+        v-model="showCreateModal"
+        @add="createClient"
+      />
 
       <ClientEditModal
         v-model="showEditModal"
@@ -44,6 +50,7 @@ import {
 } from '~/core/services/client.service'
 import { useUserStore } from '~/core/stores/UserStore'
 import type { Client } from '~/core/types/client'
+import IsEnabledToggler from '~/components/IsEnabledToggler.vue'
 
 const showCreateModal = ref(false)
 const showEditModal = ref(false)
@@ -154,14 +161,16 @@ function createColumns({
       resizable: true,
       render(row) {
         return h(
-          'span',
+          Fragment,
           {},
-          {
-            default: () => row.isEnabled.toString(),
-          }
+          [
+            h(IsEnabledToggler, {
+              modelValue: row.isEnabled,
+              clientId: row.id
+            })
+          ]
         )
       },
-      // TODO: make the custom cell for this column
     },
     {
       title: 'Subnet Name',

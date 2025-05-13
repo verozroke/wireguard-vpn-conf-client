@@ -7,7 +7,10 @@
         praesentium!
       </h3>
       <user-add-button @click="showCreateModal = true" />
-      <UserAddModal v-model="showCreateModal" @add="createUser" />
+      <UserAddModal
+        v-model="showCreateModal"
+        @add="createUser"
+      />
       <UserEditModal
         v-model="showEditModal"
         :user="currentEditUser"
@@ -45,7 +48,6 @@ import {
   authService,
   type ChangePasswordBody,
 } from '~/core/services/auth.service'
-// TODO: make user service
 import {
   userService,
   type UserCreateBody,
@@ -86,7 +88,6 @@ type DataTableColumnMethods = {
   changePasswordModalHandler: (row: User) => void
 }
 
-// TODO: change the filter options for the user
 const loginFilterOptions = computed(() =>
   users.value.map((user) => ({
     label: user.login,

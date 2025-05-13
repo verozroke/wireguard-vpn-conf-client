@@ -133,7 +133,6 @@ class ClientService {
     return data
   }
 
-  // TODO: check if is working
   async configuration(clientId: string): Promise<string> {
     const response = await axios.get<BlobPart>(
       `${this.BASE_URL}/${clientId}/configuration`,
@@ -159,7 +158,6 @@ class ClientService {
     return 'Client configuration downloaded.'
   }
 
-  // TODO: check if is working
   async qrcode(clientId: string): Promise<string> {
     const { data } = await axios.get<QRCodeResponse>(
       `${this.BASE_URL}/${clientId}/qrcode`,

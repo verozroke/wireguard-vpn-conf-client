@@ -47,7 +47,9 @@ class AuthService {
       `${this.BASE_URL}/login`,
       body,
       {
-        headers: this.getAuthHeaders(),
+        headers: {
+          'Content-Encoding': 'application/json'
+        }
       }
     )
 
@@ -81,7 +83,6 @@ class AuthService {
     return 'Password changed successfully.'
   }
 
-  // TODO: other CRUD OPERATIONS FOR USER is seperate user.service.ts
 }
 
 function createAuthService(API_URL: string): AuthService {

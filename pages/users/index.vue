@@ -7,10 +7,7 @@
         praesentium!
       </h3>
       <user-add-button @click="showCreateModal = true" />
-      <UserAddModal
-        v-model="showCreateModal"
-        @add="createUser"
-      />
+      <UserAddModal v-model="showCreateModal" @add="createUser" />
       <UserEditModal
         v-model="showEditModal"
         :user="currentEditUser"

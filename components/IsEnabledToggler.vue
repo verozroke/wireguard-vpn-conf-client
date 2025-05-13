@@ -1,20 +1,10 @@
 <template>
-  <n-switch
-    v-model:value="active"
-    size="large"
-  >
+  <n-switch v-model:value="active" size="large">
     <template #checked-icon>
-      <Icon
-        class="w-10 h-10 text-greeny"
-        name="mdi:checkbox-marked-circle"
-      />
+      <Icon class="w-10 h-10 text-greeny" name="mdi:checkbox-marked-circle" />
     </template>
     <template #unchecked-icon>
-      <Icon
-        class="w-10 h-10 text-greeny"
-        name="mdi:close-circle"
-      />
-
+      <Icon class="w-10 h-10 text-greeny" name="mdi:close-circle" />
     </template>
   </n-switch>
 </template>
@@ -33,23 +23,21 @@ const props = defineProps<{
 
 watch(active, async () => {
   if (active.value) {
-
     // TODO: enable client
     try {
       await clientService.enable({
-        clientId: props.clientId
+        clientId: props.clientId,
       })
       toast.success('Client enabled successfully')
     } catch {
       toast.error('Client enabled unsuccessfully')
-
     }
     return
   }
 
   try {
     await clientService.disable({
-      clientId: props.clientId
+      clientId: props.clientId,
     })
     toast.success('Client disabled successfully')
   } catch {
@@ -57,9 +45,7 @@ watch(active, async () => {
   }
 
   console.log('Disable', active.value)
-
 })
-
 </script>
 
 <style scoped></style>

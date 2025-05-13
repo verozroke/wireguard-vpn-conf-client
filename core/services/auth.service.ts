@@ -48,8 +48,8 @@ class AuthService {
       body,
       {
         headers: {
-          'Content-Encoding': 'application/json'
-        }
+          'Content-Encoding': 'application/json',
+        },
       }
     )
 
@@ -82,7 +82,6 @@ class AuthService {
 
     return 'Password changed successfully.'
   }
-
 }
 
 function createAuthService(API_URL: string): AuthService {

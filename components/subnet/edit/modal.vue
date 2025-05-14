@@ -14,14 +14,22 @@
       :rules="rules"
       :size="size"
     >
-      <NFormItem label="Subnet Name" path="subnet.name">
+      <!-- TODO: add the warning about subnetMask change is not available if you don't change the subnetIp.  -->
+      <!-- TODO: add the warning about changing subnetIp if subnet already has clients attached to it. -->
+      <NFormItem
+        label="Subnet Name"
+        path="subnet.name"
+      >
         <NInput
           v-model:value="formValue.subnet.name"
           clearable
           placeholder="Input your subnet name"
         />
       </NFormItem>
-      <NFormItem label="Subnet IP Address" path="subnet.subnetIp">
+      <NFormItem
+        label="Subnet IP Address"
+        path="subnet.subnetIp"
+      >
         <NInput
           v-model:value="formValue.subnet.subnetIp"
           maxlength="15"
@@ -29,7 +37,10 @@
           placeholder="Input your subnet IP address"
         />
       </NFormItem>
-      <NFormItem label="Subnet Mask (0-32)" path="subnet.subnetMask">
+      <NFormItem
+        label="Subnet Mask (0-32)"
+        path="subnet.subnetMask"
+      >
         <NInput
           v-model:value="formValue.subnet.subnetMask"
           :allow-input="onlyAllowNumber"
@@ -43,7 +54,12 @@
     </NForm>
     <template #footer>
       <div class="flex w-full justify-end gap-2">
-        <NButton secondary strong type="error" @click="model = false">
+        <NButton
+          secondary
+          strong
+          type="error"
+          @click="model = false"
+        >
           <template #icon>
             <Icon name="mdi:close" />
           </template>

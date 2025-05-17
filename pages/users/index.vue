@@ -3,11 +3,13 @@
     <div class="bg-slate-50 min-h-screen flex flex-col py-10 px-8">
       <h1 class="text-5xl mb-3 font-bold text-slate-700">Users</h1>
       <h3 class="text-lg mb-5 font-medium text-slate-500">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-        praesentium!
+        Here you can manage Users of the application.
       </h3>
       <user-add-button @click="showCreateModal = true" />
-      <UserAddModal v-model="showCreateModal" @add="createUser" />
+      <UserAddModal
+        v-model="showCreateModal"
+        @add="createUser"
+      />
       <UserEditModal
         v-model="showEditModal"
         :user="currentEditUser"

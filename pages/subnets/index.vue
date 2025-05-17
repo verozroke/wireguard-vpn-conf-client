@@ -3,11 +3,13 @@
     <div class="bg-slate-50 min-h-screen flex flex-col py-10 px-8">
       <h1 class="text-5xl mb-3 font-bold text-slate-700">Subnets</h1>
       <h3 class="text-lg mb-5 font-medium text-slate-500">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-        praesentium!
+        Here you can manage your Subnets.
       </h3>
       <subnet-add-button @click="showCreateModal = true" />
-      <SubnetAddModal v-model="showCreateModal" @add="createSubnet" />
+      <SubnetAddModal
+        v-model="showCreateModal"
+        @add="createSubnet"
+      />
       <SubnetEditModal
         v-model="showEditModal"
         :subnet="currentEditSubnet"

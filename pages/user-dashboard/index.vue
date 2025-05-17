@@ -2,14 +2,15 @@
   <div class="bg-slate-50 min-h-screen flex flex-col py-10 px-8 items-center">
     <h1 class="text-5xl mb-3 font-bold text-slate-700">Your VPN Clients</h1>
     <h3 class="text-lg mb-5 font-medium text-slate-500">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-      praesentium!
+      Here you can manage your VPN Clients.
     </h3>
-    <div
-      class="py-5 px-2 gap-5 flex items-center mx-auto flex-col w-full min-w-[512px] max-w-[768px]"
-    >
+    <div class="py-5 px-2 gap-5 flex items-center mx-auto flex-col w-full min-w-[512px] max-w-[768px]">
       <template v-if="clients.length > 0">
-        <ClientCard v-for="client in clients" :key="client.id" :client />
+        <ClientCard
+          v-for="client in clients"
+          :key="client.id"
+          :client
+        />
       </template>
       <template v-else>
         <Icon

@@ -6,15 +6,9 @@
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
         praesentium!
       </h3>
-      <QRCodeModal
-        v-model="qrCodeModal"
-        :qrcode="qrCodeImage"
-      />
+      <QRCodeModal v-model="qrCodeModal" :qrcode="qrCodeImage" />
       <client-add-button @click="showCreateModal = true" />
-      <ClientAddModal
-        v-model="showCreateModal"
-        @add="createClient"
-      />
+      <ClientAddModal v-model="showCreateModal" @add="createClient" />
 
       <ClientEditModal
         v-model="showEditModal"

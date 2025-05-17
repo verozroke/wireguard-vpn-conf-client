@@ -7,10 +7,7 @@
         praesentium!
       </h3>
       <subnet-add-button @click="showCreateModal = true" />
-      <SubnetAddModal
-        v-model="showCreateModal"
-        @add="createSubnet"
-      />
+      <SubnetAddModal v-model="showCreateModal" @add="createSubnet" />
       <SubnetEditModal
         v-model="showEditModal"
         :subnet="currentEditSubnet"

@@ -7,7 +7,10 @@
         praesentium!
       </h3>
       <user-add-button @click="showCreateModal = true" />
-      <UserAddModal v-model="showCreateModal" @add="createUser" />
+      <UserAddModal
+        v-model="showCreateModal"
+        @add="createUser"
+      />
       <UserEditModal
         v-model="showEditModal"
         :user="currentEditUser"
@@ -67,9 +70,9 @@ const currentChangePasswordUser = ref<User | null>(null)
 
 const paginationReactive = reactive({
   page: 1,
-  pageSize: 5,
+  pageSize: 10,
   showSizePicker: true,
-  pageSizes: [3, 5, 7],
+  pageSizes: [10, 20, 30],
   onChange: (page: number) => {
     paginationReactive.page = page
   },

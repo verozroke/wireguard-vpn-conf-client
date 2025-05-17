@@ -7,7 +7,10 @@
         praesentium!
       </h3>
       <subnet-add-button @click="showCreateModal = true" />
-      <SubnetAddModal v-model="showCreateModal" @add="createSubnet" />
+      <SubnetAddModal
+        v-model="showCreateModal"
+        @add="createSubnet"
+      />
       <SubnetEditModal
         v-model="showEditModal"
         :subnet="currentEditSubnet"
@@ -61,9 +64,9 @@ const currentEditSubnet = ref<Subnet | null>(null)
 
 const paginationReactive = reactive({
   page: 1,
-  pageSize: 5,
+  pageSize: 10,
   showSizePicker: true,
-  pageSizes: [3, 5, 7],
+  pageSizes: [10, 20, 30],
   onChange: (page: number) => {
     paginationReactive.page = page
   },

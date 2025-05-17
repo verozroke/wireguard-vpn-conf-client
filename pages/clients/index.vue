@@ -6,9 +6,15 @@
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
         praesentium!
       </h3>
-      <QRCodeModal v-model="qrCodeModal" :qrcode="qrCodeImage" />
+      <QRCodeModal
+        v-model="qrCodeModal"
+        :qrcode="qrCodeImage"
+      />
       <client-add-button @click="showCreateModal = true" />
-      <ClientAddModal v-model="showCreateModal" @add="createClient" />
+      <ClientAddModal
+        v-model="showCreateModal"
+        @add="createClient"
+      />
 
       <ClientEditModal
         v-model="showEditModal"
@@ -58,9 +64,9 @@ const currentEditClient = ref<Client | null>(null)
 
 const paginationReactive = reactive({
   page: 1,
-  pageSize: 5,
+  pageSize: 10,
   showSizePicker: true,
-  pageSizes: [3, 5, 7],
+  pageSizes: [10, 20, 30],
   onChange: (page: number) => {
     paginationReactive.page = page
   },

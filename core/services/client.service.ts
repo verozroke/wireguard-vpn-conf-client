@@ -142,7 +142,7 @@ class ClientService {
       }
     )
 
-    const fileName = `configuration_${clientId}.conf`
+    const fileName = `configuration.conf`
 
     const blob = new Blob([response.data], {
       type: response.headers['content-type'],

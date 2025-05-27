@@ -5,6 +5,7 @@ const config = useRuntimeConfig()
 export type LoginBody = {
   login: string
   password: string
+  email: string
 }
 
 export type LoginResponse = {
@@ -16,6 +17,15 @@ export type ChangePasswordBody = {
   userId: string
   oldPassword: string
   newPassword: string
+}
+
+export type SendCodeBody = {
+  email: string
+}
+
+export type VerifyCodeBody = {
+  email: string
+  code: string
 }
 
 export type BaseResponse = { status: string }
@@ -81,6 +91,32 @@ class AuthService {
     )
 
     return 'Password changed successfully.'
+  }
+
+  async sendCode(body: SendCodeBody): Promise<string> {
+    const { data } = await axios.post(
+      `${this.BASE_URL}/send-email`,
+      body,
+      {
+        headers: {
+          'Content-Encoding': 'application/json',
+        },
+      }
+    )
+    return data.message
+  }
+
+  async verifyCode(body: VerifyCodeBody): Promise<string> {
+    const { data } = await axios.post(
+      `${this.BASE_URL}/verify-email`,
+      body,
+      {
+        headers: {
+          'Content-Encoding': 'application/json',
+        },
+      }
+    )
+    return data.message
   }
 }
 

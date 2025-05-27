@@ -6,6 +6,7 @@ export type User = {
   id: string
   login: string
   role: Role
+  email: string
   subnets?: Subnet[]
   clients?: Client[]
 }

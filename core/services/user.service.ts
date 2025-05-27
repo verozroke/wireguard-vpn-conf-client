@@ -11,6 +11,7 @@ const BASE_URL = config.public.API_URL
 export type UserCreateBody = {
   login: string
   password: string
+  email: string
   is_admin: boolean
 }
 

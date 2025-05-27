@@ -67,7 +67,6 @@ import type { FormInst } from 'naive-ui'
 import { NButton, NForm, NFormItem, NInput, useMessage } from 'naive-ui'
 import { ref } from 'vue'
 
-import { authService, type LoginBody } from '~/core/services/auth.service'
 import { useUserStore } from '~/core/stores/UserStore'
 const toast = useMessage()
 const router = useRouter()
@@ -108,20 +107,10 @@ const signIn = (e: MouseEvent) => {
 
 const SigInRequest = async () => {
   try {
-    const body: LoginBody = {
-      login: formValue.value.login,
-      password: formValue.value.password,
-    }
+    userStore.authLogin = formValue.value.login
+    userStore.authPassword = formValue.value.password
 
-    console.log(body)
-
-    const message = await authService.login(body)
-    userStore.isAuthenticated = true
-    // route push
-    formValue.value.login = ''
-    formValue.value.password = ''
-    router.push('/subnets')
-    toast.success(message)
+    router.push('/verify')
   } catch {
     // console.error(err)
     toast.error('Login was unsuccessfull')

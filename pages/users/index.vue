@@ -294,6 +294,7 @@ const createUser = async (user: Omit<User, 'id'> & { password: string }) => {
     const body: UserCreateBody = {
       login: user.login,
       password: user.password,
+      email: user.email,
       is_admin: user.role === 'Admin',
     }
 
